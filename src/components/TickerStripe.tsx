@@ -1,68 +1,38 @@
 import { ArrowUpRight, ArrowDownRight, ExternalLink } from "lucide-react";
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const EUROPEAN_INDICES = [
-  { 
-    name: "STOXX 600", 
-    symbol: "^STOXX", 
-    value: "487.23", 
-    change: "+0.42",
-    yahooUrl: "https://finance.yahoo.com/quote/%5ESTOXX"
-  },
-  { 
-    name: "DAX", 
-    symbol: "^GDAXI", 
-    value: "16,234.50", 
-    change: "-0.15",
-    yahooUrl: "https://finance.yahoo.com/quote/%5EGDAXI"
-  },
-  { 
-    name: "CAC 40", 
-    symbol: "^FCHI", 
-    value: "7,521.30", 
-    change: "+0.28",
-    yahooUrl: "https://finance.yahoo.com/quote/%5EFCHI"
-  },
-  { 
-    name: "FTSE 100", 
-    symbol: "^FTSE", 
-    value: "7,445.32", 
-    change: "+0.18",
-    yahooUrl: "https://finance.yahoo.com/quote/%5EFTSE"
-  },
-  { 
-    name: "FTSE MIB", 
-    symbol: "FTSEMIB.MI", 
-    value: "28,945.67", 
-    change: "+0.51",
-    yahooUrl: "https://finance.yahoo.com/quote/FTSEMIB.MI"
-  },
-  { 
-    name: "IBEX 35", 
-    symbol: "^IBEX", 
-    value: "10,123.45", 
-    change: "-0.22",
-    yahooUrl: "https://finance.yahoo.com/quote/%5EIBEX"
-  },
-  { 
-    name: "AEX", 
-    symbol: "^AEX", 
-    value: "883.45", 
-    change: "+0.35",
-    yahooUrl: "https://finance.yahoo.com/quote/%5EAEX"
-  },
-  { 
-    name: "BEL 20", 
-    symbol: "^BFX", 
-    value: "4,123.67", 
-    change: "-0.08",
-    yahooUrl: "https://finance.yahoo.com/quote/%5EBFX"
-  },
-];
+interface IndexData {
+  name: string;
+  symbol: string;
+  value: string;
+  change: string;
+  yahooUrl: string;
+}
 
 export const TickerStripe = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [indices, setIndices] = useState<IndexData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchMarketData = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('get-market-data');
+      
+      if (error) {
+        console.error('Error fetching market data:', error);
+        return;
+      }
+      
+      if (data?.indices) {
+        setIndices(data.indices);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error fetching market data:', error);
+    }
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -76,8 +46,28 @@ export const TickerStripe = () => {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  const items = EUROPEAN_INDICES.map((index, i) => {
-    const isPositive = index.change.startsWith("+");
+  useEffect(() => {
+    // Initial fetch
+    fetchMarketData();
+
+    // Refresh every 60 seconds
+    const interval = setInterval(fetchMarketData, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (isLoading || indices.length === 0) {
+    return (
+      <div className="relative w-full overflow-hidden py-3 sm:py-4 bg-card/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-border">
+        <div className="flex items-center justify-center">
+          <span className="text-sm text-muted-foreground">Loading market data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  const items = indices.map((index, i) => {
+    const isPositive = parseFloat(index.change) >= 0;
     return (
       <a
         key={`index-${i}`}
@@ -99,7 +89,7 @@ export const TickerStripe = () => {
           ) : (
             <ArrowDownRight className="w-3 h-3 mr-0.5" />
           )}
-          {index.change}%
+          {isPositive ? '+' : ''}{index.change}%
         </span>
         <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
       </a>
