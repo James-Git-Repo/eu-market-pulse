@@ -1,3 +1,10 @@
+import coverBanks from "@/assets/cover-banks.jpg";
+import coverTech from "@/assets/cover-tech.jpg";
+import coverHealthcare from "@/assets/cover-healthcare.jpg";
+import coverEnergy from "@/assets/cover-energy.jpg";
+import coverConsumer from "@/assets/cover-consumer.jpg";
+import coverInsurance from "@/assets/cover-insurance.jpg";
+
 export interface Post {
   id: string;
   slug: string;
@@ -9,6 +16,7 @@ export interface Post {
   publishedAt: string;
   content: string;
   status: string;
+  coverUrl: string;
 }
 
 export const MOCK_POSTS: Post[] = [
@@ -21,6 +29,7 @@ export const MOCK_POSTS: Post[] = [
     readTime: "6 min",
     publishedAt: "2025-10-01",
     author: "TSN Desk",
+    coverUrl: coverBanks,
     content: `# Earnings Pulse: EU Banks' NIM Compression vs. Resilient Fees
 
 Net interest margin (NIM) compression has become the dominant narrative across European banking, but the real signal lies in fee income resilience and management guidance.
@@ -50,6 +59,7 @@ Investment banks with strong trading desks and wealth management arms are outper
     readTime: "7 min",
     publishedAt: "2025-09-29",
     author: "TSN Desk",
+    coverUrl: coverTech,
     content: `# Semis in Europe: Cyclicals Wearing Growth Clothing
 
 European semiconductor companies are navigating a complex landscape of cyclical demand patterns while maintaining growth narratives.
@@ -80,6 +90,7 @@ Watch for inventory normalization cycles and order book commentary in upcoming e
     readTime: "5 min",
     publishedAt: "2025-09-27",
     author: "TSN Desk",
+    coverUrl: coverHealthcare,
     content: `# Pharma Pricing Pressure: Reading Between Policy Lines
 
 European pharmaceutical companies face increasing pricing pressure from government reforms, but the impact varies significantly by company strategy.
@@ -110,6 +121,7 @@ The key metric to watch: gross-to-net deductions as a percentage of list price. 
     readTime: "8 min",
     publishedAt: "2025-09-25",
     author: "TSN Desk",
+    coverUrl: coverEnergy,
     content: `# Energy Transition: The Metals Supply Bottleneck
 
 The energy transition narrative focuses on EVs and renewables, but metals supply chains are the real constraint—and opportunity.
@@ -140,6 +152,7 @@ European mining companies with advanced-stage projects in stable jurisdictions t
     readTime: "6 min",
     publishedAt: "2025-09-23",
     author: "TSN Desk",
+    coverUrl: coverConsumer,
     content: `# Luxury Slowdown: Separating Noise from Signal
 
 European luxury goods companies are experiencing a bifurcation between aspirational and ultra-high-net-worth customer segments.
@@ -170,6 +183,7 @@ Companies with 40%+ UHNW exposure are significantly outperforming mass-luxury pl
     readTime: "7 min",
     publishedAt: "2025-09-21",
     author: "TSN Desk",
+    coverUrl: coverInsurance,
     content: `# Insurance Reinsurance Rates: The Hidden Rate Cycle
 
 Reinsurance rate increases are accelerating, but the impact varies dramatically by line of business.

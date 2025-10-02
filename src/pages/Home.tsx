@@ -43,6 +43,7 @@ const Home = () => {
               title={post.title}
               dek={post.dek}
               tag={post.tag}
+              coverUrl={post.coverUrl}
               date={new Date(post.publishedAt).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",

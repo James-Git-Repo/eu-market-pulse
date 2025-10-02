@@ -9,13 +9,20 @@ interface PostCardProps {
   tag: string;
   date: string;
   readTime: string;
+  coverUrl: string;
 }
 
-export const PostCard = ({ slug, title, dek, tag, date, readTime }: PostCardProps) => {
+export const PostCard = ({ slug, title, dek, tag, date, readTime, coverUrl }: PostCardProps) => {
   return (
     <Link to={`/post/${slug}`} className="group">
       <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-        <div className="h-2 bg-gradient-to-r from-primary via-secondary to-accent" />
+        <div className="aspect-video overflow-hidden">
+          <img 
+            src={coverUrl} 
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
         <CardContent className="p-6">
           <div className="mb-3">
             <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import logoImage from "@/assets/tsn-logo.png";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -43,7 +44,11 @@ export const Navbar = () => {
     >
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary transition-transform group-hover:scale-105" />
+          <img 
+            src={logoImage} 
+            alt="The (un)Stable Net logo" 
+            className="w-10 h-10 transition-transform group-hover:scale-105"
+          />
           <span className="text-xl font-bold tracking-tight">The (un)Stable Net</span>
         </Link>
 
