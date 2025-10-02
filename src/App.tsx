@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import { EditorProvider } from "./contexts/EditorContext";
+import { EditorLoginDialog } from "./components/EditorLoginDialog";
 import Home from "./pages/Home";
 import Archive from "./pages/Archive";
 import Post from "./pages/Post";
@@ -19,24 +21,27 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/archive" element={<Archive />} />
-            <Route path="/post/:slug" element={<Post />} />
-            <Route path="/subscribe" element={<Subscribe />} />
-            <Route path="/contribute" element={<Contribute />} />
-            <Route path="/legal/terms" element={<Terms />} />
-            <Route path="/legal/privacy" element={<Privacy />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-        </div>
-      </BrowserRouter>
+      <EditorProvider>
+        <Toaster />
+        <Sonner />
+        <EditorLoginDialog />
+        <BrowserRouter>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/archive" element={<Archive />} />
+              <Route path="/post/:slug" element={<Post />} />
+              <Route path="/subscribe" element={<Subscribe />} />
+              <Route path="/contribute" element={<Contribute />} />
+              <Route path="/legal/terms" element={<Terms />} />
+              <Route path="/legal/privacy" element={<Privacy />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </EditorProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
