@@ -1,7 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FilterBar } from "@/components/FilterBar";
 import { PostCard } from "@/components/PostCard";
-import { MOCK_POSTS, TAGS } from "@/data/mockData";
+import { TAGS } from "@/data/mockData";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Select,
   SelectContent,
@@ -14,26 +15,47 @@ const Archive = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("all");
   const [sortBy, setSortBy] = useState("latest");
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('Articles')
+        .select('*')
+        .order('published_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching posts:', error);
+      } else {
+        setPosts(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchPosts();
+  }, []);
 
   const years = useMemo(() => {
     const yearSet = new Set(
-      MOCK_POSTS.map((post) => new Date(post.publishedAt).getFullYear())
+      posts.map((post) => new Date(post.published_at).getFullYear())
     );
     return Array.from(yearSet).sort((a, b) => b - a);
-  }, []);
+  }, [posts]);
 
   const [selectedYear, setSelectedYear] = useState<string>("all");
 
   const filteredAndSortedPosts = useMemo(() => {
-    let filtered = MOCK_POSTS.filter((post) => {
+    let filtered = posts.filter((post) => {
       const matchesSearch =
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.dek.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.subtitle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.tag.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesTag = selectedTag === "all" || post.tag === selectedTag;
 
-      const postYear = new Date(post.publishedAt).getFullYear().toString();
+      const postYear = new Date(post.published_at).getFullYear().toString();
       const matchesYear = selectedYear === "all" || postYear === selectedYear;
 
       return matchesSearch && matchesTag && matchesYear;
@@ -41,12 +63,12 @@ const Archive = () => {
 
     if (sortBy === "latest") {
       filtered.sort((a, b) => 
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+        new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
       );
     }
 
     return filtered;
-  }, [searchQuery, selectedTag, selectedYear, sortBy]);
+  }, [searchQuery, selectedTag, selectedYear, sortBy, posts]);
 
   return (
     <main className="container mx-auto px-4 py-8 sm:py-10 md:py-12">
@@ -90,31 +112,39 @@ const Archive = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-        {filteredAndSortedPosts.map((post) => (
-          <PostCard
-            key={post.id}
-            slug={post.slug}
-            title={post.title}
-            dek={post.dek}
-            tag={post.tag}
-            coverUrl={post.coverUrl}
-            date={new Date(post.publishedAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}
-            readTime={post.readTime}
-          />
-        ))}
-      </div>
-
-      {filteredAndSortedPosts.length === 0 && (
+      {loading ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground text-lg">
-            No articles found matching your criteria.
-          </p>
+          <p className="text-muted-foreground text-lg">Loading articles...</p>
         </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+            {filteredAndSortedPosts.map((post) => (
+              <PostCard
+                key={post.id}
+                slug={post.slug}
+                title={post.title}
+                dek={post.subtitle || ''}
+                tag={post.tag}
+                coverUrl={post.image_url || ''}
+                date={new Date(post.published_at).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+                readTime={post.read_time}
+              />
+            ))}
+          </div>
+
+          {filteredAndSortedPosts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">
+                No articles found matching your criteria.
+              </p>
+            </div>
+          )}
+        </>
       )}
     </main>
   );

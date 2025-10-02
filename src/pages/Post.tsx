@@ -1,12 +1,95 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MOCK_POSTS } from "@/data/mockData";
 import { Card } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { useEditor } from "@/contexts/EditorContext";
+import { ArticleEditor } from "@/components/ArticleEditor";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Post = () => {
   const { slug } = useParams();
-  const post = MOCK_POSTS.find((p) => p.slug === slug);
+  const { isEditorMode } = useEditor();
+  const { toast } = useToast();
+  const [post, setPost] = useState<any>(null);
+  const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showEditor, setShowEditor] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const fetchPost = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('Articles')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) {
+      console.error('Error fetching post:', error);
+    } else {
+      setPost(data);
+      
+      // Fetch related posts
+      if (data) {
+        const { data: related } = await supabase
+          .from('Articles')
+          .select('*')
+          .eq('tag', data.tag)
+          .neq('id', data.id)
+          .limit(2);
+        
+        setRelatedPosts(related || []);
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPost();
+  }, [slug]);
+
+  const handleDelete = async () => {
+    if (!post) return;
+    
+    const { error } = await supabase
+      .from('Articles')
+      .delete()
+      .eq('id', post.id);
+
+    if (error) {
+      toast({
+        title: 'Delete failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } else {
+      toast({
+        title: 'Article deleted',
+        description: 'The article has been removed.',
+      });
+      window.location.href = '/';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -22,16 +105,35 @@ const Post = () => {
     );
   }
 
-  const relatedPosts = MOCK_POSTS.filter(
-    (p) => p.id !== post.id && p.tag === post.tag
-  ).slice(0, 2);
-
   return (
     <main className="container mx-auto px-4 py-6 sm:py-8">
-      <Link to="/" className="inline-flex items-center text-sm sm:text-base text-muted-foreground hover:text-foreground transition-colors mb-6 sm:mb-8">
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to all articles
-      </Link>
+      <div className="flex justify-between items-center mb-6 sm:mb-8">
+        <Link to="/" className="inline-flex items-center text-sm sm:text-base text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to all articles
+        </Link>
+        
+        {isEditorMode && (
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowEditor(true)}
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Edit
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete
+            </Button>
+          </div>
+        )}
+      </div>
 
       <article className="max-w-3xl mx-auto">
         <div className="mb-6 sm:mb-8">
@@ -39,24 +141,24 @@ const Post = () => {
             {post.tag}
           </span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight">{post.title}</h1>
-          <p className="text-lg sm:text-xl text-muted-foreground mb-4 sm:mb-6">{post.dek}</p>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-4 sm:mb-6">{post.subtitle}</p>
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
             <span>{post.author}</span>
             <span>•</span>
             <span>
-              {new Date(post.publishedAt).toLocaleDateString("en-US", {
+              {new Date(post.published_at).toLocaleDateString("en-US", {
                 month: "long",
                 day: "numeric",
                 year: "numeric",
               })}
             </span>
             <span>•</span>
-            <span>{post.readTime} read</span>
+            <span>{post.read_time}</span>
           </div>
         </div>
 
         <div className="prose prose-base sm:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-10 md:mb-12">
-          {post.content.split('\n').map((paragraph, i) => {
+          {post.content.split('\n').map((paragraph: string, i: number) => {
             if (paragraph.startsWith('# ')) {
               return <h1 key={i} className="text-2xl sm:text-3xl font-bold mt-6 sm:mt-8 mb-3 sm:mb-4">{paragraph.slice(2)}</h1>;
             } else if (paragraph.startsWith('## ')) {
@@ -100,11 +202,11 @@ const Post = () => {
                     <h3 className="text-xl font-bold mb-2 hover:text-primary transition-colors">
                       {related.title}
                     </h3>
-                    <p className="text-muted-foreground mb-2">{related.dek}</p>
+                    <p className="text-muted-foreground mb-2">{related.subtitle}</p>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <span>{new Date(related.publishedAt).toLocaleDateString()}</span>
+                      <span>{new Date(related.published_at).toLocaleDateString()}</span>
                       <span>•</span>
-                      <span>{related.readTime}</span>
+                      <span>{related.read_time}</span>
                     </div>
                   </Card>
                 </Link>
@@ -113,6 +215,34 @@ const Post = () => {
           </div>
         )}
       </article>
+
+      {post && (
+        <>
+          <ArticleEditor
+            article={post}
+            open={showEditor}
+            onOpenChange={setShowEditor}
+            onUpdate={fetchPost}
+          />
+          
+          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Article</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{post.title}"? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
+      )}
     </main>
   );
 };

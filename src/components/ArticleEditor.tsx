@@ -39,8 +39,8 @@ export const ArticleEditor = ({ article, open, onOpenChange, onUpdate }: Article
       let coverUrl = formData.image_url;
       if (coverFile) {
         const fileExt = coverFile.name.split('.').pop();
-        const fileName = `${article.id}-${Date.now()}.${fileExt}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const fileName = `${article.id || Date.now()}-${Date.now()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
           .from('article-images')
           .upload(fileName, coverFile, { upsert: true });
 
@@ -51,44 +51,63 @@ export const ArticleEditor = ({ article, open, onOpenChange, onUpdate }: Article
           .getPublicUrl(fileName);
 
         coverUrl = publicUrl;
-
-        // Update or insert cover record
-        const { error: coverError } = await supabase
-          .from('Covers')
-          .upsert({
-            article_id: article.id,
-            image_url: publicUrl,
-          });
-
-        if (coverError) throw coverError;
       }
 
-      // Update article
-      const { error } = await supabase
-        .from('Articles')
-        .update({
-          title: formData.title,
-          subtitle: formData.subtitle,
-          content: formData.content,
-          tag: formData.tag,
-          author: formData.author,
-          read_time: formData.read_time,
-          image_url: coverUrl,
-        })
-        .eq('id', article.id);
+      // Generate slug from title
+      const slug = formData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
 
-      if (error) throw error;
+      if (article.id === 0) {
+        // Create new article
+        const { error } = await supabase
+          .from('Articles')
+          .insert({
+            slug,
+            title: formData.title,
+            subtitle: formData.subtitle,
+            content: formData.content,
+            tag: formData.tag,
+            author: formData.author,
+            read_time: formData.read_time,
+            image_url: coverUrl,
+          });
 
-      toast({
-        title: 'Article updated',
-        description: 'Changes have been saved successfully.',
-      });
+        if (error) throw error;
+
+        toast({
+          title: 'Article created',
+          description: 'New article has been published successfully.',
+        });
+      } else {
+        // Update existing article
+        const { error } = await supabase
+          .from('Articles')
+          .update({
+            title: formData.title,
+            subtitle: formData.subtitle,
+            content: formData.content,
+            tag: formData.tag,
+            author: formData.author,
+            read_time: formData.read_time,
+            image_url: coverUrl,
+          })
+          .eq('id', article.id);
+
+        if (error) throw error;
+
+        toast({
+          title: 'Article updated',
+          description: 'Changes have been saved successfully.',
+        });
+      }
 
       onUpdate();
       onOpenChange(false);
     } catch (error: any) {
       toast({
-        title: 'Update failed',
+        title: article.id === 0 ? 'Create failed' : 'Update failed',
         description: error.message,
         variant: 'destructive',
       });
@@ -101,7 +120,7 @@ export const ArticleEditor = ({ article, open, onOpenChange, onUpdate }: Article
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Article</DialogTitle>
+          <DialogTitle>{article.id === 0 ? 'Create Article' : 'Edit Article'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -182,7 +201,7 @@ export const ArticleEditor = ({ article, open, onOpenChange, onUpdate }: Article
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Saving...' : 'Save Changes'}
+            {isLoading ? 'Saving...' : (article.id === 0 ? 'Create Article' : 'Save Changes')}
           </Button>
         </form>
       </DialogContent>
