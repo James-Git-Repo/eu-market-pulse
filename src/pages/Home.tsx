@@ -26,7 +26,7 @@ const Home = () => {
     <main>
       <Hero />
       
-      <section className="container mx-auto px-4 py-12">
+      <section className="container mx-auto px-4 py-8 sm:py-10 md:py-12">
         <FilterBar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -35,7 +35,7 @@ const Home = () => {
           tags={TAGS}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-12 sm:mb-14 md:mb-16">
           {filteredPosts.map((post) => (
             <PostCard
               key={post.id}

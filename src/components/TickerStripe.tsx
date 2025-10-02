@@ -37,9 +37,9 @@ export const TickerStripe = () => {
       <Link
         key={`post-${i}`}
         to={`/post/${post.slug}`}
-        className="inline-flex items-center px-4 py-2 rounded-full bg-accent/10 hover:bg-accent/20 transition-colors whitespace-nowrap"
+        className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-accent/10 hover:bg-accent/20 transition-colors whitespace-nowrap"
       >
-        <span className="text-sm font-medium">{post.title}</span>
+        <span className="text-xs sm:text-sm font-medium">{post.title}</span>
       </Link>
     )),
     ...MOCK_INDICES.map((index, i) => {
@@ -47,10 +47,10 @@ export const TickerStripe = () => {
       return (
         <div
           key={`index-${i}`}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 whitespace-nowrap"
+          className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-muted/50 whitespace-nowrap"
         >
-          <span className="text-sm font-semibold">{index.name}</span>
-          <span className="text-sm text-muted-foreground">{index.value}</span>
+          <span className="text-xs sm:text-sm font-semibold">{index.name}</span>
+          <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">{index.value}</span>
           <span
             className={`inline-flex items-center text-xs font-medium ${
               isPositive ? "text-chip-up" : "text-chip-down"
@@ -70,7 +70,7 @@ export const TickerStripe = () => {
 
   return (
     <div
-      className="relative w-full overflow-hidden py-4 bg-card/50 backdrop-blur-sm rounded-2xl border border-border"
+      className="relative w-full overflow-hidden py-3 sm:py-4 bg-card/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-border"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
