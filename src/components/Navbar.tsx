@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logoImage from "@/assets/tsn-logo.png";
+import logoImage from "@/assets/new-logo.png";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -50,7 +50,7 @@ export const Navbar = () => {
             alt="The (un)Stable Net logo" 
             className="w-8 h-8 sm:w-10 sm:h-10 transition-transform group-hover:scale-105"
           />
-          <span className="text-base sm:text-xl font-body font-bold tracking-wide text-primary">The (un)Stable Net</span>
+          <span className="text-base sm:text-xl font-body font-bold tracking-wide text-primary uppercase">THE (UN)STABLE NET</span>
         </Link>
 
         {/* Desktop Navigation */}
