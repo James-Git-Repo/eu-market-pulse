@@ -50,7 +50,7 @@ export const Navbar = () => {
             alt="The (un)Stable Net logo" 
             className="w-8 h-8 sm:w-10 sm:h-10 transition-transform group-hover:scale-105"
           />
-          <span className="text-base sm:text-xl font-navbar font-bold tracking-tight">The (un)Stable Net</span>
+          <span className="text-base sm:text-xl font-navbar font-bold tracking-tight uppercase">The (un)Stable Net</span>
         </Link>
 
         {/* Desktop Navigation */}

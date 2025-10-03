@@ -128,7 +128,7 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
               {title}
             </h3>
             
-            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+            <p className="text-sm font-body text-muted-foreground mb-4 line-clamp-2">
               {dek}
             </p>
             

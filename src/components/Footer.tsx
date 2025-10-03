@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export const Footer = () => {
   return (
     <footer className="w-full py-6 sm:py-8 mt-12 sm:mt-16 border-t border-border">
-      <div className="container mx-auto px-4 text-center text-xs sm:text-sm text-muted-foreground font-sans">
+      <div className="container mx-auto px-4 text-center text-xs sm:text-sm text-muted-foreground font-body">
         <p className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-0">
           <span>© {new Date().getFullYear()} The (un)Stable Net</span>
           <span className="hidden sm:inline">{" · "}</span>

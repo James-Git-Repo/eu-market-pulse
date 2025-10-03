@@ -22,8 +22,8 @@ export default {
           'sans-serif',
         ],
         navbar: [
+          'Berlin Sans FB Demi',
           'Arial Black',
-          'Arial Bold',
           'sans-serif',
         ],
         hero: [
@@ -31,9 +31,22 @@ export default {
           'Georgia',
           'serif',
         ],
+        'hero-subtitle': [
+          'Bodoni MT',
+          'Bodoni Moda',
+          'Georgia',
+          'serif',
+        ],
         title: [
-          'Roboto',
-          'sans-serif',
+          'Times New Roman',
+          'Georgia',
+          'serif',
+        ],
+        body: [
+          'Bodoni MT',
+          'Bodoni Moda',
+          'Georgia',
+          'serif',
         ],
       },
       colors: {
