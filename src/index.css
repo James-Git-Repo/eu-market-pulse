@@ -36,7 +36,7 @@ All colors MUST be HSL.
     --input: 214 32% 91%;
     --ring: 221 83% 32%;
 
-    --radius: 1rem;
+    --radius: 0.25rem;
 
     --hover: 221 83% 38%;
     --chip-up: 142 76% 36%;

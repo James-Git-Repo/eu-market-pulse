@@ -15,10 +15,24 @@ export default {
     extend: {
       fontFamily: {
         sans: [
-          'Inter',
+          'Roboto',
           '-apple-system',
           'BlinkMacSystemFont',
           'system-ui',
+          'sans-serif',
+        ],
+        navbar: [
+          'Arial Black',
+          'Arial Bold',
+          'sans-serif',
+        ],
+        hero: [
+          'Times New Roman',
+          'Georgia',
+          'serif',
+        ],
+        title: [
+          'Roboto',
           'sans-serif',
         ],
       },

@@ -109,39 +109,39 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
       )}
       
       <Link to={`/post/${slug}`} className="block">
-        <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+        <Card className="h-full overflow-hidden transition-all duration-200 hover:shadow-md">
           <div className="aspect-video overflow-hidden">
             <img 
               src={coverUrl} 
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover"
             />
           </div>
-          <CardContent className="p-6">
+          <CardContent className="p-5">
             <div className="mb-3">
-              <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
+              <span className="inline-block px-2.5 py-0.5 text-xs font-medium uppercase tracking-wide bg-primary/5 text-primary border border-primary/20">
                 {tag}
               </span>
             </div>
             
-            <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+            <h3 className="text-lg font-title font-bold mb-2 line-clamp-2">
               {title}
             </h3>
             
-            <p className="text-muted-foreground mb-4 line-clamp-2">
+            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
               {dek}
             </p>
             
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
                 <span>{date}</span>
                 <span>•</span>
                 <span>{readTime}</span>
               </div>
               
-              <div className="flex items-center gap-1 text-primary font-medium group-hover:gap-2 transition-all">
-                Read more
-                <ArrowRight className="w-4 h-4" />
+              <div className="flex items-center gap-1 text-primary font-medium uppercase tracking-wide text-xs">
+                Read
+                <ArrowRight className="w-3 h-3" />
               </div>
             </div>
           </CardContent>
