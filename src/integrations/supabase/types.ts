@@ -56,45 +56,21 @@ export type Database = {
         }
         Relationships: []
       }
-      covers: {
-        Row: {
-          category: string
-          created_at: string
-          id: number
-          name: string
-          public_url: string | null
-          storage_path: string | null
-        }
-        Insert: {
-          category: string
-          created_at?: string
-          id?: number
-          name: string
-          public_url?: string | null
-          storage_path?: string | null
-        }
-        Update: {
-          category?: string
-          created_at?: string
-          id?: number
-          name?: string
-          public_url?: string | null
-          storage_path?: string | null
-        }
-        Relationships: []
-      }
       Covers: {
         Row: {
           created_at: string
           id: number
+          image: string | null
         }
         Insert: {
           created_at?: string
           id?: number
+          image?: string | null
         }
         Update: {
           created_at?: string
           id?: number
+          image?: string | null
         }
         Relationships: []
       }
