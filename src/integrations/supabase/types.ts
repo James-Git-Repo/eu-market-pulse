@@ -56,6 +56,48 @@ export type Database = {
         }
         Relationships: []
       }
+      covers: {
+        Row: {
+          category: string
+          created_at: string
+          id: number
+          name: string
+          public_url: string | null
+          storage_path: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: number
+          name: string
+          public_url?: string | null
+          storage_path?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: number
+          name?: string
+          public_url?: string | null
+          storage_path?: string | null
+        }
+        Relationships: []
+      }
+      Covers: {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

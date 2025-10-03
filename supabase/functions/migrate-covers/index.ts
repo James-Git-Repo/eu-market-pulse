@@ -78,32 +78,16 @@ Deno.serve(async (req) => {
         .from('article-images')
         .getPublicUrl(mapping.fileName);
 
-      // Find article by tag
-      const { data: articles, error: articleError } = await supabase
-        .from('Articles')
-        .select('id')
-        .eq('tag', mapping.tag)
-        .limit(1);
-
-      if (articleError || !articles || articles.length === 0) {
-        results.push({ 
-          tag: mapping.tag, 
-          status: 'error', 
-          message: 'No article found with this tag' 
-        });
-        continue;
-      }
-
-      const articleId = articles[0].id;
-
-      // Insert into Covers table
+      // Insert into Covers table with updated schema
       const { error: coverError } = await supabase
         .from('Covers')
         .upsert({
-          article_id: articleId,
-          image_url: publicUrl,
+          name: mapping.fileName,
+          category: mapping.tag,
+          storage_path: uploadData.path,
+          public_url: publicUrl,
         }, {
-          onConflict: 'article_id',
+          onConflict: 'name',
         });
 
       if (coverError) {
@@ -117,9 +101,9 @@ Deno.serve(async (req) => {
 
       results.push({ 
         tag: mapping.tag, 
-        articleId, 
         status: 'success', 
-        url: publicUrl 
+        url: publicUrl,
+        storagePath: uploadData.path
       });
     }
 
