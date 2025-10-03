@@ -50,6 +50,12 @@ export default {
           'serif',
         ],
       },
+      backgroundSize: {
+        "400%": "400% 400%",
+      },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -118,12 +124,23 @@ export default {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        gradient: {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0) translateX(0)" },
+          "50%": { transform: "translateY(-20px) translateX(20px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         marquee: "marquee 60s linear infinite",
         "fade-in": "fade-in 0.5s ease-out",
+        gradient: "gradient 15s ease infinite",
+        float: "float 6s ease-in-out infinite",
+        "float-delayed": "float 8s ease-in-out infinite",
       },
     },
   },
