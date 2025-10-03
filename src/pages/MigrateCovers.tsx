@@ -71,7 +71,7 @@ export default function MigrateCovers() {
                   <span className="font-medium">{result.tag}:</span>
                   <span className="text-muted-foreground">
                     {result.status === 'success' 
-                      ? `Article ${result.articleId} - ${result.url}`
+                      ? `Uploaded to ${result.storagePath}`
                       : result.message
                     }
                   </span>

@@ -62,6 +62,7 @@ export async function migrateCoverImages() {
           category: mapping.tag,
           storage_path: uploadData.path,
           public_url: publicUrl,
+          image: publicUrl,
         }, {
           onConflict: 'name',
         });
