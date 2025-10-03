@@ -93,6 +93,7 @@ const Home = () => {
               {filteredPosts.map((post) => (
                 <PostCard
                   key={post.id}
+                  id={post.id}
                   slug={post.slug}
                   title={post.title}
                   dek={post.subtitle || ''}
@@ -104,6 +105,7 @@ const Home = () => {
                     year: "numeric",
                   })}
                   readTime={post.read_time}
+                  onDelete={fetchPosts}
                 />
               ))}
             </div>

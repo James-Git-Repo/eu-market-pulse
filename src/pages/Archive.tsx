@@ -18,22 +18,22 @@ const Archive = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchPosts = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('Articles')
+      .select('*')
+      .order('published_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching posts:', error);
+    } else {
+      setPosts(data || []);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('Articles')
-        .select('*')
-        .order('published_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching posts:', error);
-      } else {
-        setPosts(data || []);
-      }
-      setLoading(false);
-    };
-
     fetchPosts();
   }, []);
 
@@ -122,6 +122,7 @@ const Archive = () => {
             {filteredAndSortedPosts.map((post) => (
               <PostCard
                 key={post.id}
+                id={post.id}
                 slug={post.slug}
                 title={post.title}
                 dek={post.subtitle || ''}
@@ -133,6 +134,7 @@ const Archive = () => {
                   year: "numeric",
                 })}
                 readTime={post.read_time}
+                onDelete={fetchPosts}
               />
             ))}
           </div>
