@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Trash2 } from "lucide-react";
+import { ArrowRight, Trash2, Pencil } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -11,15 +11,19 @@ interface PostCardProps {
   id: number;
   slug: string;
   title: string;
+  subtitle?: string;
+  content?: string;
+  author?: string;
   dek: string;
   tag: string;
   date: string;
   readTime: string;
   coverUrl: string;
   onDelete?: () => void;
+  onEdit?: (article: any) => void;
 }
 
-export const PostCard = ({ id, slug, title, dek, tag, date, readTime, coverUrl, onDelete }: PostCardProps) => {
+export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag, date, readTime, coverUrl, onDelete, onEdit }: PostCardProps) => {
   const { isEditorMode } = useEditor();
   const { toast } = useToast();
 
@@ -47,20 +51,47 @@ export const PostCard = ({ id, slug, title, dek, tag, date, readTime, coverUrl, 
     }
   };
 
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit({
+        id,
+        title,
+        subtitle: subtitle || '',
+        content: content || '',
+        tag,
+        author: author || 'Editorial Team',
+        read_time: readTime,
+        image_url: coverUrl,
+      });
+    }
+  };
+
   return (
     <div className="relative group">
       {isEditorMode && (
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="destructive"
-              size="icon"
-              className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </AlertDialogTrigger>
+        <div className="absolute top-2 right-2 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button
+            variant="outline"
+            size="icon"
+            className="bg-background"
+            onClick={(e) => {
+              e.preventDefault();
+              handleEdit();
+            }}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+          
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Article</AlertDialogTitle>
@@ -74,6 +105,7 @@ export const PostCard = ({ id, slug, title, dek, tag, date, readTime, coverUrl, 
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+        </div>
       )}
       
       <Link to={`/post/${slug}`} className="block">

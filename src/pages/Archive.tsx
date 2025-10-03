@@ -3,6 +3,7 @@ import { FilterBar } from "@/components/FilterBar";
 import { PostCard } from "@/components/PostCard";
 import { TAGS } from "@/data/mockData";
 import { supabase } from "@/integrations/supabase/client";
+import { ArticleEditor } from "@/components/ArticleEditor";
 import {
   Select,
   SelectContent,
@@ -17,6 +18,7 @@ const Archive = () => {
   const [sortBy, setSortBy] = useState("latest");
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingArticle, setEditingArticle] = useState<any>(null);
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -125,6 +127,9 @@ const Archive = () => {
                 id={post.id}
                 slug={post.slug}
                 title={post.title}
+                subtitle={post.subtitle}
+                content={post.content}
+                author={post.author}
                 dek={post.subtitle || ''}
                 tag={post.tag}
                 coverUrl={post.image_url || ''}
@@ -135,6 +140,7 @@ const Archive = () => {
                 })}
                 readTime={post.read_time}
                 onDelete={fetchPosts}
+                onEdit={setEditingArticle}
               />
             ))}
           </div>
@@ -147,6 +153,15 @@ const Archive = () => {
             </div>
           )}
         </>
+      )}
+      
+      {editingArticle && (
+        <ArticleEditor
+          article={editingArticle}
+          open={!!editingArticle}
+          onOpenChange={(open) => !open && setEditingArticle(null)}
+          onUpdate={fetchPosts}
+        />
       )}
     </main>
   );

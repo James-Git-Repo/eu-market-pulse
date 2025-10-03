@@ -16,6 +16,7 @@ const Home = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<any>(null);
   const { isEditorMode } = useEditor();
 
   const emptyArticle = {
@@ -96,6 +97,9 @@ const Home = () => {
                   id={post.id}
                   slug={post.slug}
                   title={post.title}
+                  subtitle={post.subtitle}
+                  content={post.content}
+                  author={post.author}
                   dek={post.subtitle || ''}
                   tag={post.tag}
                   coverUrl={post.image_url || ''}
@@ -106,6 +110,7 @@ const Home = () => {
                   })}
                   readTime={post.read_time}
                   onDelete={fetchPosts}
+                  onEdit={setEditingArticle}
                 />
               ))}
             </div>
@@ -129,6 +134,15 @@ const Home = () => {
         onOpenChange={setShowCreateDialog}
         onUpdate={fetchPosts}
       />
+      
+      {editingArticle && (
+        <ArticleEditor
+          article={editingArticle}
+          open={!!editingArticle}
+          onOpenChange={(open) => !open && setEditingArticle(null)}
+          onUpdate={fetchPosts}
+        />
+      )}
     </main>
   );
 };
