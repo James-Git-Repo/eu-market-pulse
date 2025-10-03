@@ -22,6 +22,7 @@ export default {
           'sans-serif',
         ],
         navbar: [
+          'Orbitron',
           'Berlin Sans FB Demi',
           'Arial Black',
           'sans-serif',

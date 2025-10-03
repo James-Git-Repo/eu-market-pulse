@@ -58,7 +58,7 @@ export const TickerStripe = () => {
 
   if (isLoading || indices.length === 0) {
     return (
-      <div className="relative w-full overflow-hidden py-3 sm:py-4 bg-card/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-border">
+      <div className="relative w-full overflow-hidden py-3 sm:py-4 bg-card/30 backdrop-blur-sm border border-border">
         <div className="flex items-center justify-center">
           <span className="text-sm text-muted-foreground">Loading market data...</span>
         </div>
@@ -74,7 +74,7 @@ export const TickerStripe = () => {
         href={index.yahooUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-muted/50 hover:bg-muted/80 transition-colors whitespace-nowrap group cursor-pointer"
+        className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-muted/50 hover:bg-muted/80 transition-all border border-border/50 hover:border-border whitespace-nowrap group cursor-pointer"
         aria-label={`View ${index.name} on Yahoo Finance`}
       >
         <span className="text-xs sm:text-sm font-semibold">{index.name}</span>
@@ -98,7 +98,7 @@ export const TickerStripe = () => {
 
   return (
     <div
-      className="relative w-full overflow-hidden py-3 sm:py-4 bg-card/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-border"
+      className="relative w-full overflow-hidden py-3 sm:py-4 bg-card/30 backdrop-blur-sm border border-border"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
