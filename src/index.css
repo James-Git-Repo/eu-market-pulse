@@ -97,3 +97,11 @@ All colors MUST be HSL.
     }
   }
 }
+
+@layer utilities {
+  .animate-draw-line,
+  .animate-draw-line-delayed {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+}
