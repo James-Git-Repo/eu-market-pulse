@@ -119,12 +119,12 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
           </div>
           <CardContent className="p-5">
             <div className="mb-3">
-              <span className="inline-block px-2.5 py-0.5 text-xs font-medium uppercase tracking-wide bg-primary/5 text-primary border border-primary/20">
+              <span className="inline-block px-2.5 py-0.5 text-xs font-body font-medium uppercase tracking-wide bg-primary/5 text-primary border border-primary/20 rounded-none">
                 {tag}
               </span>
             </div>
             
-            <h3 className="text-lg font-title font-bold mb-2 line-clamp-2">
+            <h3 className="text-lg font-body font-bold mb-2 line-clamp-2">
               {title}
             </h3>
             
