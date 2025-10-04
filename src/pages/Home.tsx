@@ -66,7 +66,7 @@ const Home = () => {
     <main>
       <Hero />
       
-      <section className="container mx-auto px-4 sm:px-6 py-12">
+      <section className="container mx-auto px-4 py-8 sm:py-10 md:py-12">
         <div className="flex justify-between items-center mb-6">
           <FilterBar
             searchQuery={searchQuery}
@@ -90,7 +90,7 @@ const Home = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-12 sm:mb-14 md:mb-16">
               {filteredPosts.map((post) => (
                 <PostCard
                   key={post.id}

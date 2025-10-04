@@ -67,57 +67,86 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
   };
 
   return (
-    <Card className="group grid grid-rows-[auto_auto_220px] overflow-hidden border border-border rounded-[var(--radius)] bg-gradient-to-b from-card to-background shadow-[0_10px_30px_rgba(0,0,0,.25),0_2px_8px_rgba(0,0,0,.2)] transition-all duration-200 hover:shadow-[0_12px_38px_rgba(0,0,0,.35),0_6px_16px_rgba(0,0,0,.25)] hover:-translate-y-0.5 relative">
+    <div className="relative group">
       {isEditorMode && (
-        <div className="absolute top-2 right-2 z-20 flex gap-2">
+        <div className="absolute top-2 right-2 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button
+            variant="outline"
             size="icon"
-            variant="secondary"
-            onClick={handleEdit}
-            className="w-8 h-8"
+            className="bg-background"
+            onClick={(e) => {
+              e.preventDefault();
+              handleEdit();
+            }}
           >
-            <Pencil className="w-4 h-4" />
+            <Pencil className="h-4 w-4" />
           </Button>
+          
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button size="icon" variant="destructive" className="w-8 h-8">
-                <Trash2 className="w-4 h-4" />
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Trash2 className="h-4 w-4" />
               </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Article</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete this article? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Article</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{title}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         </div>
       )}
-
-      <div className="p-4 sm:p-5 pb-2">
-        <h3 className="text-lg font-sans font-semibold m-0">{title}</h3>
-      </div>
-
-      <p className="mx-4 sm:mx-5 mb-3 text-sm text-muted-foreground font-sans">{dek}</p>
-
-      <div className="relative h-full overflow-hidden border-t border-border">
-        <img
-          src={coverUrl}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-300 scale-105 group-hover:scale-100"
-        />
-        <Link 
-          to={`/post/${slug}`} 
-          className="absolute inset-0"
-          aria-label={`Read article: ${title}`}
-        />
-      </div>
-    </Card>
+      
+      <Link to={`/post/${slug}`} className="block">
+        <Card className="h-full overflow-hidden transition-all duration-200 hover:shadow-md">
+          <div className="aspect-video overflow-hidden">
+            <img 
+              src={coverUrl} 
+              alt={title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <CardContent className="p-5">
+            <div className="mb-3">
+              <span className="inline-block px-2.5 py-0.5 text-xs font-body font-medium uppercase tracking-wide bg-primary/5 text-primary border border-primary/20 rounded-none">
+                {tag}
+              </span>
+            </div>
+            
+            <h3 className="text-lg font-body font-bold mb-2 line-clamp-2">
+              {title}
+            </h3>
+            
+            <p className="text-sm font-body text-muted-foreground mb-4 line-clamp-2">
+              {dek}
+            </p>
+            
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <span>{date}</span>
+                <span>•</span>
+                <span>{readTime}</span>
+              </div>
+              
+              <div className="flex items-center gap-1 text-primary font-medium uppercase tracking-wide text-xs">
+                Read
+                <ArrowRight className="w-3 h-3" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    </div>
   );
 };
