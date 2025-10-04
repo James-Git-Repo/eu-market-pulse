@@ -15,33 +15,26 @@ export default {
     extend: {
       fontFamily: {
         sans: [
-          'Roboto',
-          '-apple-system',
-          'BlinkMacSystemFont',
+          'Inter',
           'system-ui',
+          '-apple-system',
           'sans-serif',
         ],
         navbar: [
-          'Orbitron',
-          'Berlin Sans FB Demi',
-          'Arial Black',
+          'Inter',
           'sans-serif',
         ],
         hero: [
-          'Times New Roman',
-          'Georgia',
-          'serif',
+          'Inter',
+          'sans-serif',
         ],
         'hero-subtitle': [
-          'Bodoni MT',
-          'Bodoni Moda',
-          'Georgia',
-          'serif',
+          'Inter',
+          'sans-serif',
         ],
         title: [
-          'Times New Roman',
-          'Georgia',
-          'serif',
+          'Inter',
+          'sans-serif',
         ],
         body: [
           'Bodoni MT',
@@ -115,6 +108,11 @@ export default {
           to: {
             height: "0",
           },
+        },
+        floaty: {
+          "0%": { transform: "translate3d(-2%, -1%, 0) scale(1.05)" },
+          "50%": { transform: "translate3d(1%, 1.5%, 0) scale(1.03)" },
+          "100%": { transform: "translate3d(3%, -1%, 0) scale(1.08)" },
         },
         marquee: {
           "0%": { transform: "translateX(0%)" },
