@@ -1,13 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import logoImage from "@/assets/new-logo.png";
+import { SubscribeDialog } from "./SubscribeDialog";
+import { ContributeDialog } from "./ContributeDialog";
 
 export const Navbar = () => {
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
+  const [contributeOpen, setContributeOpen] = useState(false);
+  
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,14 +62,34 @@ export const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/contribute" className="text-foreground hover:text-primary transition-colors font-body">
-            Contribute
-          </Link>
-          <Link to="/subscribe">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-body">
-              Subscribe
-            </Button>
-          </Link>
+          {isHomePage ? (
+            <>
+              <Link to="/articles" className="text-foreground hover:text-primary transition-colors font-body">
+                Newsletter
+              </Link>
+              <button
+                onClick={() => {}}
+                className="text-foreground hover:text-primary transition-colors font-body"
+              >
+                About
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setContributeOpen(true)}
+                className="text-foreground hover:text-primary transition-colors font-body"
+              >
+                Contribute
+              </button>
+              <Button 
+                onClick={() => setSubscribeOpen(true)}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-body"
+              >
+                Subscribe
+              </Button>
+            </>
+          )}
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-lg hover:bg-muted transition-colors"
@@ -86,14 +113,42 @@ export const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background/95 backdrop-blur">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-3">
-            <Link to="/contribute" onClick={() => setMobileMenuOpen(false)} className="p-3 rounded-lg hover:bg-muted transition-colors font-body">
-              Contribute
-            </Link>
-            <Link to="/subscribe" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body">
-                Subscribe
-              </Button>
-            </Link>
+            {isHomePage ? (
+              <>
+                <Link to="/articles" onClick={() => setMobileMenuOpen(false)} className="p-3 rounded-lg hover:bg-muted transition-colors font-body">
+                  Newsletter
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                  }}
+                  className="p-3 rounded-lg hover:bg-muted transition-colors font-body text-left"
+                >
+                  About
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    setContributeOpen(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="p-3 rounded-lg hover:bg-muted transition-colors font-body text-left"
+                >
+                  Contribute
+                </button>
+                <Button 
+                  onClick={() => {
+                    setSubscribeOpen(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body"
+                >
+                  Subscribe
+                </Button>
+              </>
+            )}
             <button
               onClick={toggleDarkMode}
               className="flex items-center gap-2 p-3 rounded-lg hover:bg-muted transition-colors"
@@ -104,6 +159,10 @@ export const Navbar = () => {
           </div>
         </div>
       )}
+      
+      {/* Dialogs */}
+      <SubscribeDialog open={subscribeOpen} onOpenChange={setSubscribeOpen} />
+      <ContributeDialog open={contributeOpen} onOpenChange={setContributeOpen} />
     </header>
   );
 };

@@ -148,6 +148,10 @@ export default {
           "0%": { transform: "translateY(0)" },
           "100%": { transform: "translateY(20px)" },
         },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "0.3" },
+          "50%": { opacity: "0.6" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -162,6 +166,7 @@ export default {
         "draw-line": "draw-line 3s ease-in-out infinite",
         "draw-line-delayed": "draw-line 4s ease-in-out infinite 1s",
         "scroll-down": "scroll-down 20s linear infinite",
+        "pulse-slow": "pulse-slow 4s ease-in-out infinite",
       },
     },
   },
