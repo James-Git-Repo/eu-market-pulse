@@ -144,6 +144,10 @@ export default {
           "0%": { strokeDashoffset: "1000" },
           "100%": { strokeDashoffset: "0" },
         },
+        "scroll-down": {
+          "0%": { transform: "translateY(0)" },
+          "100%": { transform: "translateY(20px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -157,6 +161,7 @@ export default {
         "grid-move": "grid-move 20s linear infinite",
         "draw-line": "draw-line 3s ease-in-out infinite",
         "draw-line-delayed": "draw-line 4s ease-in-out infinite 1s",
+        "scroll-down": "scroll-down 20s linear infinite",
       },
     },
   },

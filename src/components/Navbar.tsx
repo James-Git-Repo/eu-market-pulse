@@ -55,11 +55,13 @@ export const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/articles" className="text-foreground hover:text-primary transition-colors font-body">
-            About
+          <Link to="/contribute" className="text-foreground hover:text-primary transition-colors font-body">
+            Contribute
           </Link>
-          <Link to="/articles" className="text-foreground hover:text-primary transition-colors font-body">
-            Newsletter
+          <Link to="/subscribe">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-body">
+              Subscribe
+            </Button>
           </Link>
           <button
             onClick={toggleDarkMode}
@@ -84,11 +86,13 @@ export const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background/95 backdrop-blur">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-3">
-            <Link to="/articles" onClick={() => setMobileMenuOpen(false)} className="p-3 rounded-lg hover:bg-muted transition-colors font-body">
-              About
+            <Link to="/contribute" onClick={() => setMobileMenuOpen(false)} className="p-3 rounded-lg hover:bg-muted transition-colors font-body">
+              Contribute
             </Link>
-            <Link to="/articles" onClick={() => setMobileMenuOpen(false)} className="p-3 rounded-lg hover:bg-muted transition-colors font-body">
-              Newsletter
+            <Link to="/subscribe" onClick={() => setMobileMenuOpen(false)}>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body">
+                Subscribe
+              </Button>
             </Link>
             <button
               onClick={toggleDarkMode}
