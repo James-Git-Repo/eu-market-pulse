@@ -7,7 +7,8 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { EditorProvider } from "./contexts/EditorContext";
 import { EditorLoginDialog } from "./components/EditorLoginDialog";
-import Home from "./pages/Home";
+import Index from "./pages/Index";
+import Articles from "./pages/Articles";
 import Archive from "./pages/Archive";
 import Post from "./pages/Post";
 import Subscribe from "./pages/Subscribe";
@@ -30,7 +31,8 @@ const App = () => (
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Index />} />
+              <Route path="/articles" element={<Articles />} />
               <Route path="/archive" element={<Archive />} />
               <Route path="/post/:slug" element={<Post />} />
               <Route path="/subscribe" element={<Subscribe />} />
