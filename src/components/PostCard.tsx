@@ -109,7 +109,7 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
       )}
       
       <Link to={`/post/${slug}`} className="block">
-        <Card className="h-full overflow-hidden transition-all duration-200 hover:shadow-md">
+        <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 transform">
           <div className="aspect-video overflow-hidden">
             <img 
               src={coverUrl} 
