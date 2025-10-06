@@ -9,7 +9,7 @@ export const Footer = () => {
     <footer className="w-full py-6 sm:py-8 mt-12 sm:mt-16">
       <div className="container mx-auto px-4">
         {isHomePage && (
-          <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-6">
             {/* Social Links - Left */}
             <div className="flex gap-4">
               <a 

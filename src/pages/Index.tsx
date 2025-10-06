@@ -84,7 +84,7 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Newsletter Project Card - Links to Articles */}
           <Link to="/articles" className="block group">
-            <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full hover:shadow-xl transition-all duration-300 border border-border">
+            <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full hover:shadow-xl transition-all duration-300 border border-border hover:scale-105 transform">
               <h3 className="text-2xl font-bold font-body mb-3">Newsletter project</h3>
               <p className="text-muted-foreground font-body mb-6">
                 European Market Movers — weekly macro & market signals
@@ -109,7 +109,7 @@ const Index = () => {
           </Link>
 
           {/* Million Slots Card */}
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group">
+          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform">
             <h3 className="text-2xl font-bold font-body mb-3">The Million Slots AI Billboard</h3>
             <p className="text-muted-foreground font-body mb-6">
               A 1,000,000-tile digital mosaic of AI micro-videos
@@ -130,7 +130,7 @@ const Index = () => {
           </div>
 
           {/* Coming Soon Card */}
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group">
+          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform">
             <h3 className="text-2xl font-bold font-body mb-3">Coming soon</h3>
             <p className="text-muted-foreground font-body mb-6">
               New projects and deep dives are landing shortly.

@@ -8,14 +8,64 @@ export const Hero = () => {
       {/* Base gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#f5e6d3] via-[#ffd7a8] to-[#e8d4b8] dark:from-[#2a1f15] dark:via-[#3d2a1a] dark:to-[#1f1812]" />
       
+      {/* Tech circuit pattern overlay */}
+      <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="techGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
+            <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="hsl(var(--secondary))" stopOpacity="0.6" />
+          </linearGradient>
+        </defs>
+        
+        {/* Vertical circuit lines */}
+        <g className="animate-pulse-slow">
+          <line x1="15%" y1="0" x2="15%" y2="100%" stroke="url(#techGradient)" strokeWidth="1.5" />
+          <circle cx="15%" cy="20%" r="3" fill="url(#techGradient)" />
+          <circle cx="15%" cy="60%" r="3" fill="url(#techGradient)" />
+          
+          <line x1="45%" y1="0" x2="45%" y2="100%" stroke="url(#techGradient)" strokeWidth="1.5" />
+          <circle cx="45%" cy="35%" r="3" fill="url(#techGradient)" />
+          <circle cx="45%" cy="80%" r="3" fill="url(#techGradient)" />
+          
+          <line x1="75%" y1="0" x2="75%" y2="100%" stroke="url(#techGradient)" strokeWidth="1.5" />
+          <circle cx="75%" cy="25%" r="3" fill="url(#techGradient)" />
+          <circle cx="75%" cy="70%" r="3" fill="url(#techGradient)" />
+        </g>
+        
+        {/* Horizontal circuit connections */}
+        <g className="animate-pulse-slow" style={{animationDelay: '1s'}}>
+          <line x1="0" y1="30%" x2="100%" y2="30%" stroke="url(#techGradient)" strokeWidth="1.5" />
+          <circle cx="30%" cy="30%" r="3" fill="url(#techGradient)" />
+          <circle cx="60%" cy="30%" r="3" fill="url(#techGradient)" />
+          
+          <line x1="0" y1="65%" x2="100%" y2="65%" stroke="url(#techGradient)" strokeWidth="1.5" />
+          <circle cx="25%" cy="65%" r="3" fill="url(#techGradient)" />
+          <circle cx="70%" cy="65%" r="3" fill="url(#techGradient)" />
+        </g>
+        
+        {/* Microchip-style squares */}
+        <g className="animate-float">
+          <rect x="10%" y="15%" width="30" height="30" fill="none" stroke="url(#techGradient)" strokeWidth="1.5" />
+          <rect x="50%" y="40%" width="40" height="40" fill="none" stroke="url(#techGradient)" strokeWidth="1.5" />
+          <rect x="80%" y="20%" width="25" height="25" fill="none" stroke="url(#techGradient)" strokeWidth="1.5" />
+        </g>
+        
+        {/* Data flow paths */}
+        <g className="animate-pulse-slow" style={{animationDelay: '0.5s'}}>
+          <path d="M 10 50 L 100 80 L 200 70 L 300 100" stroke="url(#techGradient)" strokeWidth="1.5" fill="none" strokeDasharray="5,5" />
+          <path d="M 400 150 L 500 120 L 600 140 L 700 110" stroke="url(#techGradient)" strokeWidth="1.5" fill="none" strokeDasharray="5,5" />
+        </g>
+      </svg>
+      
       {/* Animated grid pattern */}
-      <div className="absolute inset-0 opacity-20 dark:opacity-30">
+      <div className="absolute inset-0 opacity-15 dark:opacity-25">
         <div className="absolute inset-0" style={{
           backgroundImage: `
-            linear-gradient(to right, hsl(var(--primary) / 0.1) 1px, transparent 1px),
-            linear-gradient(to bottom, hsl(var(--primary) / 0.1) 1px, transparent 1px)
+            linear-gradient(to right, hsl(var(--primary) / 0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, hsl(var(--primary) / 0.15) 1px, transparent 1px)
           `,
-          backgroundSize: '60px 60px',
+          backgroundSize: '40px 40px',
           animation: 'grid-move 20s linear infinite'
         }} />
       </div>
