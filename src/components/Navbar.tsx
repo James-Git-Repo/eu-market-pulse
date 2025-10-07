@@ -67,12 +67,12 @@ export const Navbar = () => {
               <Link to="/articles" className="text-foreground hover:text-primary transition-colors font-body">
                 Newsletter
               </Link>
-              <button
-                onClick={() => {}}
+              <Link
+                to="/about"
                 className="text-foreground hover:text-primary transition-colors font-body"
               >
                 About
-              </button>
+              </Link>
             </>
           ) : (
             <>
@@ -118,14 +118,13 @@ export const Navbar = () => {
                 <Link to="/articles" onClick={() => setMobileMenuOpen(false)} className="p-3 rounded-lg hover:bg-muted transition-colors font-body">
                   Newsletter
                 </Link>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                  }}
-                  className="p-3 rounded-lg hover:bg-muted transition-colors font-body text-left"
+                <Link
+                  to="/about"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-3 rounded-lg hover:bg-muted transition-colors font-body text-left block"
                 >
                   About
-                </button>
+                </Link>
               </>
             ) : (
               <>
