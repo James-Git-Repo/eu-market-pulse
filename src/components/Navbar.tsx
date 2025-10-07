@@ -5,6 +5,17 @@ import { useEffect, useState } from "react";
 import logoImage from "@/assets/new-logo.png";
 import { SubscribeDialog } from "./SubscribeDialog";
 import { ContributeDialog } from "./ContributeDialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -13,8 +24,10 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [subscribeOpen, setSubscribeOpen] = useState(false);
   const [contributeOpen, setContributeOpen] = useState(false);
+  const [askQuestionsOpen, setAskQuestionsOpen] = useState(false);
   
   const isHomePage = location.pathname === "/";
+  const isAboutPage = location.pathname === "/about";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +46,11 @@ export const Navbar = () => {
     }
   }, []);
 
+  const { toast } = useToast();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [question, setQuestion] = useState("");
+
   const toggleDarkMode = () => {
     const newMode = !darkMode;
     setDarkMode(newMode);
@@ -42,6 +60,18 @@ export const Navbar = () => {
     } else {
       document.documentElement.classList.remove("dark");
     }
+  };
+
+  const handleSubmitQuestion = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Question submitted!",
+      description: "Thank you for reaching out. I'll get back to you soon.",
+    });
+    setName("");
+    setEmail("");
+    setQuestion("");
+    setAskQuestionsOpen(false);
   };
 
   return (
@@ -74,6 +104,13 @@ export const Navbar = () => {
                 About
               </Link>
             </>
+          ) : isAboutPage ? (
+            <Button 
+              onClick={() => setAskQuestionsOpen(true)}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-body"
+            >
+              Ask questions
+            </Button>
           ) : (
             <>
               <button
@@ -126,6 +163,16 @@ export const Navbar = () => {
                   About
                 </Link>
               </>
+            ) : isAboutPage ? (
+              <Button 
+                onClick={() => {
+                  setAskQuestionsOpen(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body"
+              >
+                Ask questions
+              </Button>
             ) : (
               <>
                 <button
@@ -162,6 +209,61 @@ export const Navbar = () => {
       {/* Dialogs */}
       <SubscribeDialog open={subscribeOpen} onOpenChange={setSubscribeOpen} />
       <ContributeDialog open={contributeOpen} onOpenChange={setContributeOpen} />
+      
+      {/* Ask Questions Dialog */}
+      <Dialog open={askQuestionsOpen} onOpenChange={setAskQuestionsOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Ask a Question</DialogTitle>
+            <DialogDescription>
+              Have a question? I'd love to hear from you.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmitQuestion} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder="Your name"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="your@email.com"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="question">Question</Label>
+              <Textarea
+                id="question"
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                required
+                placeholder="What would you like to know?"
+                className="mt-1 min-h-32"
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              Send Question
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 };

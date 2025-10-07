@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Menu, X } from "lucide-react";
-import logoImage from "@/assets/new-logo.png";
 import {
   Dialog,
   DialogContent,
@@ -14,31 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Footer } from "@/components/Footer";
 
 export default function About() {
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("darkMode") === "true" ||
-      (!localStorage.getItem("darkMode") &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-  );
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [askQuestionsOpen, setAskQuestionsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [question, setQuestion] = useState("");
   const { toast } = useToast();
-
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem("darkMode", String(newMode));
-    if (newMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
 
   const handleSubmitQuestion = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,85 +32,7 @@ export default function About() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {/* Navbar */}
-      <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
-            <img
-              src={logoImage}
-              alt="The (un)Stable Net logo"
-              className="w-8 h-8 sm:w-10 sm:h-10 transition-transform group-hover:scale-105"
-            />
-            <span className="text-base sm:text-xl font-body font-bold tracking-wide text-primary uppercase">
-              THE (UN)STABLE NET
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
-            <Button
-              onClick={() => setAskQuestionsOpen(true)}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-body"
-            >
-              Ask questions
-            </Button>
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg hover:bg-muted transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-        </nav>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border bg-background/95 backdrop-blur">
-            <div className="container mx-auto px-4 py-4 flex flex-col gap-3">
-              <Button
-                onClick={() => {
-                  setAskQuestionsOpen(true);
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body"
-              >
-                Ask questions
-              </Button>
-              <button
-                onClick={toggleDarkMode}
-                className="flex items-center gap-2 p-3 rounded-lg hover:bg-muted transition-colors"
-              >
-                {darkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-                <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
-              </button>
-            </div>
-          </div>
-        )}
-      </header>
-
+    <>
       {/* Main Content */}
       <main className="flex-1">
         <div className="relative bg-gradient-to-br from-[#D4A574] via-[#C89B68] to-[#B8865A] dark:from-[#2a1f15] dark:via-[#3d2a1a] dark:to-[#1f1812] py-20 md:py-32">
@@ -163,9 +64,6 @@ export default function About() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <Footer />
 
       {/* Ask Questions Dialog */}
       <Dialog open={askQuestionsOpen} onOpenChange={setAskQuestionsOpen}>
@@ -221,6 +119,6 @@ export default function About() {
           </form>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
