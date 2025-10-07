@@ -18,12 +18,46 @@ const Index = () => {
   const { isEditorMode } = useEditor();
   const { toast } = useToast();
   const [editingProject, setEditingProject] = useState<string | null>(null);
-  const [projectData, setProjectData] = useState({
-    title: "",
-    description: "",
-    imageUrl: "",
+  const [projectCovers, setProjectCovers] = useState<{
+    newsletter: { id: number | null; imageUrl: string };
+    'million-slots': { id: number | null; imageUrl: string };
+    'coming-soon': { id: number | null; imageUrl: string };
+  }>({
+    newsletter: { id: null, imageUrl: '' },
+    'million-slots': { id: null, imageUrl: '' },
+    'coming-soon': { id: null, imageUrl: '' },
   });
   const [uploading, setUploading] = useState(false);
+
+  // Fetch project covers from Supabase on mount
+  useEffect(() => {
+    const fetchCovers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('Covers')
+          .select('*')
+          .eq('category', 'project');
+
+        if (error) throw error;
+
+        if (data) {
+          const newsletter = data.find(cover => cover.name === 'newsletter');
+          const millionSlots = data.find(cover => cover.name === 'million-slots');
+          const comingSoon = data.find(cover => cover.name === 'coming-soon');
+
+          setProjectCovers({
+            newsletter: { id: newsletter?.id || null, imageUrl: newsletter?.image || '' },
+            'million-slots': { id: millionSlots?.id || null, imageUrl: millionSlots?.image || '' },
+            'coming-soon': { id: comingSoon?.id || null, imageUrl: comingSoon?.image || '' },
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching covers:', error);
+      }
+    };
+
+    fetchCovers();
+  }, []);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, projectId: string) => {
     const file = e.target.files?.[0];
@@ -45,12 +79,50 @@ const Index = () => {
         .from('article-images')
         .getPublicUrl(filePath);
 
-      setProjectData(prev => ({ ...prev, imageUrl: publicUrl }));
+      // Update Supabase Covers table
+      const coverId = projectCovers[projectId as keyof typeof projectCovers]?.id;
+
+      if (coverId) {
+        // Update existing record
+        const { error: updateError } = await supabase
+          .from('Covers')
+          .update({ image: publicUrl })
+          .eq('id', coverId);
+
+        if (updateError) throw updateError;
+      } else {
+        // Insert new record
+        const { data: newCover, error: insertError } = await supabase
+          .from('Covers')
+          .insert({
+            category: 'project',
+            name: projectId,
+            image: publicUrl,
+          })
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+
+        if (newCover) {
+          setProjectCovers(prev => ({
+            ...prev,
+            [projectId]: { id: newCover.id, imageUrl: publicUrl }
+          }));
+        }
+      }
+
+      setProjectCovers(prev => ({
+        ...prev,
+        [projectId]: { ...prev[projectId as keyof typeof projectCovers], imageUrl: publicUrl }
+      }));
       
       toast({
         title: "Image uploaded",
-        description: "Project cover image updated successfully.",
+        description: "Project cover image updated and saved successfully.",
       });
+      
+      setEditingProject(null);
     } catch (error) {
       toast({
         title: "Upload failed",
@@ -180,11 +252,6 @@ const Index = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     setEditingProject("newsletter");
-                    setProjectData({
-                      title: "Newsletter project",
-                      description: "European Market Movers — weekly macro & market signals",
-                      imageUrl: "",
-                    });
                   }}
                 >
                   <Pencil className="w-4 h-4" />
@@ -194,22 +261,32 @@ const Index = () => {
               <p className="text-muted-foreground font-body mb-6">
                 European Market Movers — weekly macro & market signals
               </p>
-              <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
-                <svg className="w-full h-full" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0,150 Q100,100 200,120 T400,100 L400,250 L0,250 Z" fill="url(#grad1)" opacity="0.6"/>
-                  <path d="M0,170 Q100,130 200,150 T400,140 L400,250 L0,250 Z" fill="url(#grad2)" opacity="0.4"/>
-                  <defs>
-                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" style={{stopColor: 'hsl(var(--primary))', stopOpacity: 1}} />
-                      <stop offset="100%" style={{stopColor: 'hsl(var(--accent))', stopOpacity: 1}} />
-                    </linearGradient>
-                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" style={{stopColor: 'hsl(var(--accent))', stopOpacity: 1}} />
-                      <stop offset="100%" style={{stopColor: 'hsl(var(--primary))', stopOpacity: 1}} />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
+              {projectCovers.newsletter.imageUrl ? (
+                <div className="aspect-video rounded-lg overflow-hidden">
+                  <img 
+                    src={projectCovers.newsletter.imageUrl} 
+                    alt="Newsletter cover" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
+                  <svg className="w-full h-full" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,150 Q100,100 200,120 T400,100 L400,250 L0,250 Z" fill="url(#grad1)" opacity="0.6"/>
+                    <path d="M0,170 Q100,130 200,150 T400,140 L400,250 L0,250 Z" fill="url(#grad2)" opacity="0.4"/>
+                    <defs>
+                      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style={{stopColor: 'hsl(var(--primary))', stopOpacity: 1}} />
+                        <stop offset="100%" style={{stopColor: 'hsl(var(--accent))', stopOpacity: 1}} />
+                      </linearGradient>
+                      <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style={{stopColor: 'hsl(var(--accent))', stopOpacity: 1}} />
+                        <stop offset="100%" style={{stopColor: 'hsl(var(--primary))', stopOpacity: 1}} />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              )}
             </div>
           </Link>
 
@@ -222,11 +299,6 @@ const Index = () => {
                 className="absolute top-2 right-2 z-10"
                 onClick={() => {
                   setEditingProject("million-slots");
-                  setProjectData({
-                    title: "The Million Slots AI Billboard",
-                    description: "A 1,000,000-tile digital mosaic of AI micro-videos",
-                    imageUrl: "",
-                  });
                 }}
               >
                 <Pencil className="w-4 h-4" />
@@ -236,19 +308,29 @@ const Index = () => {
             <p className="text-muted-foreground font-body mb-6">
               A 1,000,000-tile digital mosaic of AI micro-videos
             </p>
-            <div className="aspect-video bg-gradient-to-br from-primary/30 to-secondary/30 rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
-              <div className="w-full h-full grid grid-cols-10 grid-rows-10 gap-0.5 p-2">
-                {Array.from({ length: 100 }).map((_, i) => (
-                  <div 
-                    key={i} 
-                    className="bg-gradient-to-br from-primary to-accent rounded-sm opacity-70"
-                    style={{
-                      animationDelay: `${i * 0.02}s`
-                    }}
-                  />
-                ))}
+            {projectCovers['million-slots'].imageUrl ? (
+              <div className="aspect-video rounded-lg overflow-hidden">
+                <img 
+                  src={projectCovers['million-slots'].imageUrl} 
+                  alt="Million Slots cover" 
+                  className="w-full h-full object-cover"
+                />
               </div>
-            </div>
+            ) : (
+              <div className="aspect-video bg-gradient-to-br from-primary/30 to-secondary/30 rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105">
+                <div className="w-full h-full grid grid-cols-10 grid-rows-10 gap-0.5 p-2">
+                  {Array.from({ length: 100 }).map((_, i) => (
+                    <div 
+                      key={i} 
+                      className="bg-gradient-to-br from-primary to-accent rounded-sm opacity-70"
+                      style={{
+                        animationDelay: `${i * 0.02}s`
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Coming Soon Card */}
@@ -260,11 +342,6 @@ const Index = () => {
                 className="absolute top-2 right-2 z-10"
                 onClick={() => {
                   setEditingProject("coming-soon");
-                  setProjectData({
-                    title: "Coming soon",
-                    description: "New projects and deep dives are landing shortly.",
-                    imageUrl: "",
-                  });
                 }}
               >
                 <Pencil className="w-4 h-4" />
@@ -274,9 +351,19 @@ const Index = () => {
             <p className="text-muted-foreground font-body mb-6">
               New projects and deep dives are landing shortly.
             </p>
-            <div className="aspect-video bg-gradient-to-br from-secondary/20 to-primary/20 rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-accent opacity-40 animate-pulse" />
-            </div>
+            {projectCovers['coming-soon'].imageUrl ? (
+              <div className="aspect-video rounded-lg overflow-hidden">
+                <img 
+                  src={projectCovers['coming-soon'].imageUrl} 
+                  alt="Coming soon cover" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="aspect-video bg-gradient-to-br from-secondary/20 to-primary/20 rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-accent opacity-40 animate-pulse" />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -300,11 +387,11 @@ const Index = () => {
               />
               {uploading && <p className="text-sm text-muted-foreground mt-2">Uploading...</p>}
             </div>
-            {projectData.imageUrl && (
+            {editingProject && projectCovers[editingProject as keyof typeof projectCovers]?.imageUrl && (
               <div>
-                <Label>Preview</Label>
+                <Label>Current Cover</Label>
                 <img
-                  src={projectData.imageUrl}
+                  src={projectCovers[editingProject as keyof typeof projectCovers].imageUrl}
                   alt="Cover preview"
                   className="w-full h-40 object-cover rounded-lg mt-2"
                 />
