@@ -169,7 +169,23 @@ export default function About() {
       {/* Main Content */}
       <main className="flex-1">
         {/* Hero Section with Title */}
-        <div className="relative bg-gradient-to-br from-[#D4A574] via-[#C89B68] to-[#B8865A] dark:from-[#2a1f15] dark:via-[#3d2a1a] dark:to-[#1f1812] py-20 md:py-32">
+        <div className="relative bg-gradient-to-br from-[#1a1f2e] via-[#0f1419] to-[#0a0d14] py-20 md:py-32">
+          {/* Circuit Board Overlay */}
+          <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="circuit-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="currentColor" className="text-primary" />
+                <circle cx="50" cy="50" r="1.5" fill="currentColor" className="text-primary" />
+                <circle cx="98" cy="98" r="1" fill="currentColor" className="text-primary" />
+                <line x1="2" y1="2" x2="50" y2="50" stroke="currentColor" strokeWidth="0.5" className="text-primary/40" />
+                <line x1="50" y1="50" x2="98" y2="98" stroke="currentColor" strokeWidth="0.5" className="text-primary/40" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#circuit-pattern)" />
+          </svg>
+          
+          {/* Subtle Dot Grid Overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_hsl(var(--primary))_1px,_transparent_1px)] [background-size:24px_24px] opacity-10" />
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
@@ -227,7 +243,7 @@ export default function About() {
                 </h2>
                 
                 <div className="prose prose-lg max-w-none text-foreground/80">
-                  <p className="leading-relaxed mb-6">
+                  <p className="leading-relaxed mb-6 text-justify">
                     Hi I'm Jacopo, Swiss–Italian and endlessly curious. I love the moment an idea clicks; the scribble that turns into a plan, the first draft that suddenly breathes. I write The (un)Stable Net to make sense of markets, tech, and the ways we work; not with hype, but with patient curiosity and useful notes. I'm happiest building small things that make bigger things possible: a tidy workflow, a clear brief, a tool that quietly does its job. What pulls me forward: well-crafted design, honest conversations, and teams that care about the details. I like rooms where people listen, events that actually create serendipity, and dashboards that tell a story at a glance. I enjoy tinkering with AI and finance not for the buzz but for the craft; turning data into something you can feel and use.
                   </p>
                 </div>
@@ -260,10 +276,10 @@ export default function About() {
                 </div>
                 <div className="flex flex-col justify-center space-y-6">
                   <div className="prose prose-lg max-w-none text-foreground/80">
-                    <p className="leading-relaxed">
+                    <p className="leading-relaxed text-justify">
                       A life between languages and borders taught me to build bridges; between Italy and Switzerland, between ideas and execution, between vision and everyday habits. I care about clarity, momentum, and kindness. If what I create helps you take the next step, quicker or clearer, I'm happy.
                     </p>
-                    <p className="leading-relaxed">
+                    <p className="leading-relaxed text-justify">
                       Outside work you'll usually find me in the mountains, hiking when the trails are open and skiing all winter. I grew up crisscrossing the Alps, so I'm biased toward early starts, long ridgelines, and the kind of clear air that resets your head. Those days feed the writing here. If you're into thoughtful tools, better workflows, and work that respects people's time, you'll feel at home here.
                     </p>
                   </div>
