@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Newspaper } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ContributeDialogProps {
   open: boolean;
@@ -43,8 +44,19 @@ export const ContributeDialog = ({ open, onOpenChange }: ContributeDialogProps) 
 
     setIsSubmitting(true);
     
-    // TODO: Wire to actual submission handler
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('Contributions')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          article_topic: formData.topic,
+          article_summary: formData.content,
+          policy_agreement: formData.consent,
+        });
+
+      if (error) throw error;
+
       toast({
         title: "Submission received!",
         description: "We'll review your contribution and get back to you soon.",
@@ -56,9 +68,16 @@ export const ContributeDialog = ({ open, onOpenChange }: ContributeDialogProps) 
         content: "",
         consent: false,
       });
-      setIsSubmitting(false);
       onOpenChange(false);
-    }, 1000);
+    } catch (error) {
+      toast({
+        title: "Submission failed",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

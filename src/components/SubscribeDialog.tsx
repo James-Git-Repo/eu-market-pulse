@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SubscribeDialogProps {
   open: boolean;
@@ -37,17 +38,32 @@ export const SubscribeDialog = ({ open, onOpenChange }: SubscribeDialogProps) =>
 
     setIsSubmitting(true);
     
-    // TODO: Wire to actual email service
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('Newsletter Sub')
+        .insert({
+          email: email,
+          policy_agreement: consent,
+        });
+
+      if (error) throw error;
+
       toast({
         title: "Successfully subscribed!",
         description: "You'll receive our next newsletter soon.",
       });
       setEmail("");
       setConsent(false);
-      setIsSubmitting(false);
       onOpenChange(false);
-    }, 1000);
+    } catch (error) {
+      toast({
+        title: "Subscription failed",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
