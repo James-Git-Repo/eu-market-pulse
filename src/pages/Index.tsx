@@ -1,7 +1,67 @@
 import { Link } from "react-router-dom";
-import { Linkedin, Github, Youtube } from "lucide-react";
+import { Linkedin, Github, Youtube, Upload, Pencil } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useEditor } from "@/contexts/EditorContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Index = () => {
+  const { isEditorMode } = useEditor();
+  const { toast } = useToast();
+  const [editingProject, setEditingProject] = useState<string | null>(null);
+  const [projectData, setProjectData] = useState({
+    title: "",
+    description: "",
+    imageUrl: "",
+  });
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, projectId: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${projectId}-${Math.random()}.${fileExt}`;
+      const filePath = `project-covers/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('article-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(filePath);
+
+      setProjectData(prev => ({ ...prev, imageUrl: publicUrl }));
+      
+      toast({
+        title: "Image uploaded",
+        description: "Project cover image updated successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Circuit board animated background */}
@@ -111,7 +171,25 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Newsletter Project Card - Links to Articles */}
           <Link to="/articles" className="block group">
-            <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full hover:shadow-xl transition-all duration-300 border border-border hover:scale-105 transform">
+            <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full hover:shadow-xl transition-all duration-300 border border-border hover:scale-105 transform relative">
+              {isEditorMode && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="absolute top-2 right-2 z-10"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setEditingProject("newsletter");
+                    setProjectData({
+                      title: "Newsletter project",
+                      description: "European Market Movers — weekly macro & market signals",
+                      imageUrl: "",
+                    });
+                  }}
+                >
+                  <Pencil className="w-4 h-4" />
+                </Button>
+              )}
               <h3 className="text-2xl font-bold font-body mb-3">Newsletter project</h3>
               <p className="text-muted-foreground font-body mb-6">
                 European Market Movers — weekly macro & market signals
@@ -136,7 +214,24 @@ const Index = () => {
           </Link>
 
           {/* Million Slots Card */}
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform">
+          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform relative">
+            {isEditorMode && (
+              <Button
+                size="sm"
+                variant="secondary"
+                className="absolute top-2 right-2 z-10"
+                onClick={() => {
+                  setEditingProject("million-slots");
+                  setProjectData({
+                    title: "The Million Slots AI Billboard",
+                    description: "A 1,000,000-tile digital mosaic of AI micro-videos",
+                    imageUrl: "",
+                  });
+                }}
+              >
+                <Pencil className="w-4 h-4" />
+              </Button>
+            )}
             <h3 className="text-2xl font-bold font-body mb-3">The Million Slots AI Billboard</h3>
             <p className="text-muted-foreground font-body mb-6">
               A 1,000,000-tile digital mosaic of AI micro-videos
@@ -157,7 +252,24 @@ const Index = () => {
           </div>
 
           {/* Coming Soon Card */}
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform">
+          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform relative">
+            {isEditorMode && (
+              <Button
+                size="sm"
+                variant="secondary"
+                className="absolute top-2 right-2 z-10"
+                onClick={() => {
+                  setEditingProject("coming-soon");
+                  setProjectData({
+                    title: "Coming soon",
+                    description: "New projects and deep dives are landing shortly.",
+                    imageUrl: "",
+                  });
+                }}
+              >
+                <Pencil className="w-4 h-4" />
+              </Button>
+            )}
             <h3 className="text-2xl font-bold font-body mb-3">Coming soon</h3>
             <p className="text-muted-foreground font-body mb-6">
               New projects and deep dives are landing shortly.
@@ -169,6 +281,38 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Edit Project Dialog */}
+      <Dialog open={!!editingProject} onOpenChange={() => setEditingProject(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Project Cover</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="cover-upload">Upload Cover Image</Label>
+              <Input
+                id="cover-upload"
+                type="file"
+                accept="image/*"
+                onChange={(e) => editingProject && handleImageUpload(e, editingProject)}
+                disabled={uploading}
+                className="mt-1"
+              />
+              {uploading && <p className="text-sm text-muted-foreground mt-2">Uploading...</p>}
+            </div>
+            {projectData.imageUrl && (
+              <div>
+                <Label>Preview</Label>
+                <img
+                  src={projectData.imageUrl}
+                  alt="Cover preview"
+                  className="w-full h-40 object-cover rounded-lg mt-2"
+                />
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

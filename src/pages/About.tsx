@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useEditor } from "@/contexts/EditorContext";
+import { Upload } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,11 +17,52 @@ import { Linkedin, Youtube, Github } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function About() {
+  const { isEditorMode } = useEditor();
   const [askQuestionsOpen, setAskQuestionsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [question, setQuestion] = useState("");
+  const [heroImage, setHeroImage] = useState("");
+  const [gridImage, setGridImage] = useState("");
   const { toast } = useToast();
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: 'hero' | 'grid') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `about-${imageType}-${Math.random()}.${fileExt}`;
+      const filePath = `about-images/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('article-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(filePath);
+
+      if (imageType === 'hero') {
+        setHeroImage(publicUrl);
+      } else {
+        setGridImage(publicUrl);
+      }
+      
+      toast({
+        title: "Image uploaded",
+        description: "Your photo has been uploaded successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleSubmitQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,10 +107,29 @@ export default function About() {
                 {/* Photo Space - Left */}
                 <div className="order-2 md:order-1">
                   <div className="relative aspect-square rounded-full overflow-hidden bg-background/20 backdrop-blur-sm border-8 border-background/40">
-                    {/* Placeholder for photo */}
-                    <div className="absolute inset-0 flex items-center justify-center text-foreground/40 text-lg font-body">
-                      Photo placeholder
-                    </div>
+                    {heroImage ? (
+                      <img src={heroImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-foreground/40 text-lg font-body">
+                        Photo placeholder
+                      </div>
+                    )}
+                    {isEditorMode && (
+                      <label className="absolute bottom-4 right-4 cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, 'hero')}
+                          className="hidden"
+                        />
+                        <Button size="sm" variant="secondary" asChild>
+                          <span>
+                            <Upload className="w-4 h-4 mr-2" />
+                            Upload
+                          </span>
+                        </Button>
+                      </label>
+                    )}
                   </div>
                 </div>
                 
@@ -104,8 +166,28 @@ export default function About() {
 
               {/* Photo Grid Section */}
               <div className="grid md:grid-cols-2 gap-8 mb-16">
-                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 aspect-square flex items-center justify-center">
-                  <span className="text-muted-foreground text-lg font-body">Photo placeholder</span>
+                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 aspect-square flex items-center justify-center relative overflow-hidden">
+                  {gridImage ? (
+                    <img src={gridImage} alt="About" className="w-full h-full object-cover rounded-lg" />
+                  ) : (
+                    <span className="text-muted-foreground text-lg font-body">Photo placeholder</span>
+                  )}
+                  {isEditorMode && (
+                    <label className="absolute bottom-4 right-4 cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, 'grid')}
+                        className="hidden"
+                      />
+                      <Button size="sm" variant="secondary" asChild>
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload
+                        </span>
+                      </Button>
+                    </label>
+                  )}
                 </div>
                 <div className="flex flex-col justify-center space-y-6">
                   <div className="prose prose-lg max-w-none text-foreground/80">
