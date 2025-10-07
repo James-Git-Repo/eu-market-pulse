@@ -128,15 +128,24 @@ export type Database = {
       Questions: {
         Row: {
           created_at: string
+          email: string | null
           id: number
+          name: string | null
+          question: string | null
         }
         Insert: {
           created_at?: string
+          email?: string | null
           id?: number
+          name?: string | null
+          question?: string | null
         }
         Update: {
           created_at?: string
+          email?: string | null
           id?: number
+          name?: string | null
+          question?: string | null
         }
         Relationships: []
       }
