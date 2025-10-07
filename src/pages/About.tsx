@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Linkedin, Youtube, Github } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function About() {
   const [askQuestionsOpen, setAskQuestionsOpen] = useState(false);
@@ -20,16 +21,35 @@ export default function About() {
   const [question, setQuestion] = useState("");
   const { toast } = useToast();
 
-  const handleSubmitQuestion = (e: React.FormEvent) => {
+  const handleSubmitQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Question submitted!",
-      description: "Thank you for reaching out. I'll get back to you soon.",
-    });
-    setName("");
-    setEmail("");
-    setQuestion("");
-    setAskQuestionsOpen(false);
+    
+    try {
+      const { error } = await supabase
+        .from('Questions')
+        .insert({
+          name: name,
+          email: email,
+          question: question,
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Question submitted!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+      });
+      setName("");
+      setEmail("");
+      setQuestion("");
+      setAskQuestionsOpen(false);
+    } catch (error) {
+      toast({
+        title: "Submission failed",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
