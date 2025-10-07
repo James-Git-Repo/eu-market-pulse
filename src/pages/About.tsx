@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useEditor } from "@/contexts/EditorContext";
 import { Upload } from "lucide-react";
@@ -24,7 +24,41 @@ export default function About() {
   const [question, setQuestion] = useState("");
   const [heroImage, setHeroImage] = useState("");
   const [gridImage, setGridImage] = useState("");
+  const [heroImageId, setHeroImageId] = useState<number | null>(null);
+  const [gridImageId, setGridImageId] = useState<number | null>(null);
   const { toast } = useToast();
+
+  // Fetch images from Supabase on mount
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('Covers')
+          .select('*')
+          .eq('category', 'about');
+
+        if (error) throw error;
+
+        if (data) {
+          const heroData = data.find(img => img.name === 'hero-photo');
+          const gridData = data.find(img => img.name === 'grid-photo');
+
+          if (heroData) {
+            setHeroImage(heroData.image || '');
+            setHeroImageId(heroData.id);
+          }
+          if (gridData) {
+            setGridImage(gridData.image || '');
+            setGridImageId(gridData.id);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: 'hero' | 'grid') => {
     const file = e.target.files?.[0];
@@ -45,6 +79,41 @@ export default function About() {
         .from('article-images')
         .getPublicUrl(filePath);
 
+      // Update Supabase Covers table
+      const coverName = imageType === 'hero' ? 'hero-photo' : 'grid-photo';
+      const coverId = imageType === 'hero' ? heroImageId : gridImageId;
+
+      if (coverId) {
+        // Update existing record
+        const { error: updateError } = await supabase
+          .from('Covers')
+          .update({ image: publicUrl })
+          .eq('id', coverId);
+
+        if (updateError) throw updateError;
+      } else {
+        // Insert new record
+        const { data: newCover, error: insertError } = await supabase
+          .from('Covers')
+          .insert({
+            category: 'about',
+            name: coverName,
+            image: publicUrl,
+          })
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+
+        if (newCover) {
+          if (imageType === 'hero') {
+            setHeroImageId(newCover.id);
+          } else {
+            setGridImageId(newCover.id);
+          }
+        }
+      }
+
       if (imageType === 'hero') {
         setHeroImage(publicUrl);
       } else {
@@ -53,7 +122,7 @@ export default function About() {
       
       toast({
         title: "Image uploaded",
-        description: "Your photo has been uploaded successfully.",
+        description: "Your photo has been uploaded and saved successfully.",
       });
     } catch (error) {
       toast({
