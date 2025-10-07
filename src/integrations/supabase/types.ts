@@ -56,6 +56,36 @@ export type Database = {
         }
         Relationships: []
       }
+      Contributions: {
+        Row: {
+          article_summary: string | null
+          article_topic: string | null
+          created_at: string
+          email: string | null
+          id: number
+          name: string | null
+          policy_agreement: boolean | null
+        }
+        Insert: {
+          article_summary?: string | null
+          article_topic?: string | null
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          policy_agreement?: boolean | null
+        }
+        Update: {
+          article_summary?: string | null
+          article_topic?: string | null
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          policy_agreement?: boolean | null
+        }
+        Relationships: []
+      }
       Covers: {
         Row: {
           created_at: string
@@ -71,6 +101,42 @@ export type Database = {
           created_at?: string
           id?: number
           image?: string | null
+        }
+        Relationships: []
+      }
+      "Newsletter Sub": {
+        Row: {
+          created_at: string
+          email: string | null
+          id: number
+          policy_agreement: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          policy_agreement?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          policy_agreement?: boolean | null
+        }
+        Relationships: []
+      }
+      Questions: {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
         }
         Relationships: []
       }
