@@ -18,8 +18,10 @@ export default function About() {
   const [question, setQuestion] = useState("");
   const [heroImage, setHeroImage] = useState("");
   const [gridImage, setGridImage] = useState("");
+  const [communityImage, setCommunityImage] = useState("");
   const [heroImageId, setHeroImageId] = useState<number | null>(null);
   const [gridImageId, setGridImageId] = useState<number | null>(null);
+  const [communityImageId, setCommunityImageId] = useState<number | null>(null);
   const { toast } = useToast();
 
   // Fetch images from Supabase on mount
@@ -33,6 +35,7 @@ export default function About() {
         if (data) {
           const heroData = data.find((img) => img.name === "hero-photo");
           const gridData = data.find((img) => img.name === "grid-photo");
+          const communityData = data.find((img) => img.name === "community-photo");
 
           if (heroData) {
             setHeroImage(heroData.image || "");
@@ -41,6 +44,10 @@ export default function About() {
           if (gridData) {
             setGridImage(gridData.image || "");
             setGridImageId(gridData.id);
+          }
+          if (communityData) {
+            setCommunityImage(communityData.image || "");
+            setCommunityImageId(communityData.id);
           }
         }
       } catch (error) {
@@ -51,7 +58,7 @@ export default function About() {
     fetchImages();
   }, []);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: "hero" | "grid") => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: "hero" | "grid" | "community") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -69,8 +76,8 @@ export default function About() {
       } = supabase.storage.from("article-images").getPublicUrl(filePath);
 
       // Update Supabase Covers table
-      const coverName = imageType === "hero" ? "hero-photo" : "grid-photo";
-      const coverId = imageType === "hero" ? heroImageId : gridImageId;
+      const coverName = imageType === "hero" ? "hero-photo" : imageType === "grid" ? "grid-photo" : "community-photo";
+      const coverId = imageType === "hero" ? heroImageId : imageType === "grid" ? gridImageId : communityImageId;
 
       if (coverId) {
         // Update existing record
@@ -94,16 +101,20 @@ export default function About() {
         if (newCover) {
           if (imageType === "hero") {
             setHeroImageId(newCover.id);
-          } else {
+          } else if (imageType === "grid") {
             setGridImageId(newCover.id);
+          } else {
+            setCommunityImageId(newCover.id);
           }
         }
       }
 
       if (imageType === "hero") {
         setHeroImage(publicUrl);
-      } else {
+      } else if (imageType === "grid") {
         setGridImage(publicUrl);
+      } else {
+        setCommunityImage(publicUrl);
       }
 
       toast({
@@ -330,7 +341,7 @@ export default function About() {
 
               {/* Photo Grid Section */}
               <div className="grid md:grid-cols-2 gap-8 mb-16">
-                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 aspect-square flex items-center justify-center relative overflow-hidden">
+                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 aspect-square flex items-center justify-center relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
                   {gridImage ? (
                     <img src={gridImage} alt="About" className="w-full h-full object-cover rounded-lg" />
                   ) : (
@@ -353,7 +364,7 @@ export default function About() {
                     </label>
                   )}
                 </div>
-                <div className="flex flex-col justify-center space-y-6">
+                <div className="flex flex-col justify-center space-y-6 animate-fade-in">
                   <div className="prose prose-lg max-w-none text-foreground/80">
                     <p className="leading-relaxed text-justify">
                       A life between languages and borders taught me to build bridges; between Italy and Switzerland,
@@ -368,6 +379,50 @@ export default function About() {
                       here.
                     </p>
                   </div>
+                </div>
+              </div>
+
+              {/* Community Section with Cover Image */}
+              <div className="mb-16 space-y-8">
+                <div className="relative rounded-2xl overflow-hidden h-64 md:h-96 group">
+                  {communityImage ? (
+                    <img src={communityImage} alt="Community" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center">
+                      <span className="text-muted-foreground text-lg font-body">Community Cover Image</span>
+                    </div>
+                  )}
+                  {isEditorMode && (
+                    <label className="absolute bottom-4 right-4 cursor-pointer z-10">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, "community")}
+                        className="hidden"
+                      />
+                      <Button size="sm" variant="secondary" asChild>
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload
+                        </span>
+                      </Button>
+                    </label>
+                  )}
+                </div>
+                
+                <div className="prose prose-lg max-w-none text-foreground/80 animate-fade-in">
+                  <h2 className="text-3xl md:text-4xl font-bold font-body mb-6 bg-gradient-to-r from-[#FFA94D] via-[#FF8C3D] to-[#FF6B2B] bg-clip-text text-transparent">
+                    Join the community. Let's grow together.
+                  </h2>
+                  <p className="leading-relaxed text-justify mb-6">
+                    Join the community. Let's grow together and become more knowledgeable innovators, entrepreneurs, professionals and, first of all, better people. The (un)Stable Net is a collaborative project shaped by my long running curiosity for innovation and finance. I use it to make sense of markets, technology and the ways we work, not with hype but with patient curiosity, clear sources and notes you can actually use.
+                  </p>
+                  <p className="leading-relaxed text-justify mb-6">
+                    This is a living project. I ship small improvements often: new briefs, tighter frameworks, practical AI workflows to try, and occasional deep dives from a European perspective, mostly Switzerland and Italy. Expect short, readable pieces that cut through noise, simple tools you can reuse with your team, and reflections that stay close to real world constraints and the next step. The goal is always the same: turn scattered signals into something helpful you can apply this week.
+                  </p>
+                  <p className="leading-relaxed text-justify">
+                    If that resonates, follow along, ask questions, challenge assumptions and share what you are learning. Your feedback, corrections and ideas shape what comes next: features, formats and topics. I will keep it practical, collaborative and kind, so we can make the work better together.
+                  </p>
                 </div>
               </div>
 
