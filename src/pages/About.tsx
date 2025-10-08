@@ -2,13 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useEditor } from "@/contexts/EditorContext";
 import { Upload } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -32,71 +26,63 @@ export default function About() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const { data, error } = await supabase
-          .from('Covers')
-          .select('*')
-          .eq('category', 'about');
+        const { data, error } = await supabase.from("Covers").select("*").eq("category", "about");
 
         if (error) throw error;
 
         if (data) {
-          const heroData = data.find(img => img.name === 'hero-photo');
-          const gridData = data.find(img => img.name === 'grid-photo');
+          const heroData = data.find((img) => img.name === "hero-photo");
+          const gridData = data.find((img) => img.name === "grid-photo");
 
           if (heroData) {
-            setHeroImage(heroData.image || '');
+            setHeroImage(heroData.image || "");
             setHeroImageId(heroData.id);
           }
           if (gridData) {
-            setGridImage(gridData.image || '');
+            setGridImage(gridData.image || "");
             setGridImageId(gridData.id);
           }
         }
       } catch (error) {
-        console.error('Error fetching images:', error);
+        console.error("Error fetching images:", error);
       }
     };
 
     fetchImages();
   }, []);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: 'hero' | 'grid') => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: "hero" | "grid") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `about-${imageType}-${Math.random()}.${fileExt}`;
       const filePath = `about-images/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, file);
+      const { error: uploadError } = await supabase.storage.from("article-images").upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("article-images").getPublicUrl(filePath);
 
       // Update Supabase Covers table
-      const coverName = imageType === 'hero' ? 'hero-photo' : 'grid-photo';
-      const coverId = imageType === 'hero' ? heroImageId : gridImageId;
+      const coverName = imageType === "hero" ? "hero-photo" : "grid-photo";
+      const coverId = imageType === "hero" ? heroImageId : gridImageId;
 
       if (coverId) {
         // Update existing record
-        const { error: updateError } = await supabase
-          .from('Covers')
-          .update({ image: publicUrl })
-          .eq('id', coverId);
+        const { error: updateError } = await supabase.from("Covers").update({ image: publicUrl }).eq("id", coverId);
 
         if (updateError) throw updateError;
       } else {
         // Insert new record
         const { data: newCover, error: insertError } = await supabase
-          .from('Covers')
+          .from("Covers")
           .insert({
-            category: 'about',
+            category: "about",
             name: coverName,
             image: publicUrl,
           })
@@ -106,7 +92,7 @@ export default function About() {
         if (insertError) throw insertError;
 
         if (newCover) {
-          if (imageType === 'hero') {
+          if (imageType === "hero") {
             setHeroImageId(newCover.id);
           } else {
             setGridImageId(newCover.id);
@@ -114,12 +100,12 @@ export default function About() {
         }
       }
 
-      if (imageType === 'hero') {
+      if (imageType === "hero") {
         setHeroImage(publicUrl);
       } else {
         setGridImage(publicUrl);
       }
-      
+
       toast({
         title: "Image uploaded",
         description: "Your photo has been uploaded and saved successfully.",
@@ -135,15 +121,13 @@ export default function About() {
 
   const handleSubmitQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
-      const { error } = await supabase
-        .from('Questions')
-        .insert({
-          name: name,
-          email: email,
-          question: question,
-        });
+      const { error } = await supabase.from("Questions").insert({
+        name: name,
+        email: email,
+        question: question,
+      });
 
       if (error) throw error;
 
@@ -172,7 +156,7 @@ export default function About() {
         <div className="relative py-20 md:py-32 overflow-hidden">
           {/* Base gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#D4A574] via-[#C89B68] to-[#B8865A] dark:from-[#2a1f15] dark:via-[#3d2a1a] dark:to-[#1f1812]" />
-          
+
           {/* Circuit board pattern overlay */}
           <svg className="absolute inset-0 w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -182,62 +166,79 @@ export default function About() {
                 <stop offset="100%" stopColor="#FFD6A5" stopOpacity="0.5" />
               </linearGradient>
             </defs>
-            
+
             {/* Vertical circuit lines */}
             <g className="animate-pulse-slow">
               <line x1="10%" y1="0" x2="10%" y2="100%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <circle cx="10%" cy="15%" r="5" fill="url(#circuitGrad)" />
               <circle cx="10%" cy="45%" r="5" fill="url(#circuitGrad)" />
               <circle cx="10%" cy="75%" r="5" fill="url(#circuitGrad)" />
-              
+
               <line x1="25%" y1="0" x2="25%" y2="85%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <circle cx="25%" cy="20%" r="5" fill="url(#circuitGrad)" />
               <circle cx="25%" cy="55%" r="5" fill="url(#circuitGrad)" />
-              
+
               <line x1="40%" y1="0" x2="40%" y2="100%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <circle cx="40%" cy="25%" r="5" fill="url(#circuitGrad)" />
               <circle cx="40%" cy="60%" r="5" fill="url(#circuitGrad)" />
               <circle cx="40%" cy="90%" r="5" fill="url(#circuitGrad)" />
-              
+
               <line x1="55%" y1="0" x2="55%" y2="80%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <circle cx="55%" cy="18%" r="5" fill="url(#circuitGrad)" />
               <circle cx="55%" cy="50%" r="5" fill="url(#circuitGrad)" />
-              
+
               <line x1="70%" y1="0" x2="70%" y2="100%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <circle cx="70%" cy="30%" r="5" fill="url(#circuitGrad)" />
               <circle cx="70%" cy="65%" r="5" fill="url(#circuitGrad)" />
-              
+
               <line x1="85%" y1="0" x2="85%" y2="90%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <circle cx="85%" cy="22%" r="5" fill="url(#circuitGrad)" />
               <circle cx="85%" cy="58%" r="5" fill="url(#circuitGrad)" />
             </g>
-            
+
             {/* Horizontal connecting lines */}
-            <g className="animate-pulse-slow" style={{animationDelay: '0.5s'}}>
+            <g className="animate-pulse-slow" style={{ animationDelay: "0.5s" }}>
               <line x1="0" y1="20%" x2="100%" y2="20%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <line x1="15%" y1="50%" x2="95%" y2="50%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <line x1="0" y1="75%" x2="85%" y2="75%" stroke="url(#circuitGrad)" strokeWidth="2" />
               <line x1="20%" y1="90%" x2="100%" y2="90%" stroke="url(#circuitGrad)" strokeWidth="2" />
             </g>
-            
+
             {/* Hexagon shapes */}
             <g className="animate-float">
-              <polygon points="150,100 175,115 175,145 150,160 125,145 125,115" 
-                fill="none" stroke="url(#circuitGrad)" strokeWidth="2.5" />
-              <polygon points="450,250 485,272 485,316 450,338 415,316 415,272" 
-                fill="none" stroke="url(#circuitGrad)" strokeWidth="2.5" />
-              <polygon points="800,150 830,167 830,201 800,218 770,201 770,167" 
-                fill="none" stroke="url(#circuitGrad)" strokeWidth="2.5" />
+              <polygon
+                points="150,100 175,115 175,145 150,160 125,145 125,115"
+                fill="none"
+                stroke="url(#circuitGrad)"
+                strokeWidth="2.5"
+              />
+              <polygon
+                points="450,250 485,272 485,316 450,338 415,316 415,272"
+                fill="none"
+                stroke="url(#circuitGrad)"
+                strokeWidth="2.5"
+              />
+              <polygon
+                points="800,150 830,167 830,201 800,218 770,201 770,167"
+                fill="none"
+                stroke="url(#circuitGrad)"
+                strokeWidth="2.5"
+              />
             </g>
-            
+
             {/* Diagonal circuit paths */}
-            <g className="animate-pulse-slow" style={{animationDelay: '1s'}}>
+            <g className="animate-pulse-slow" style={{ animationDelay: "1s" }}>
               <path d="M 0 100 L 100 130 L 200 120 L 300 145" stroke="url(#circuitGrad)" strokeWidth="2" fill="none" />
-              <path d="M 200 250 L 350 270 L 500 265 L 650 280" stroke="url(#circuitGrad)" strokeWidth="2" fill="none" />
+              <path
+                d="M 200 250 L 350 270 L 500 265 L 650 280"
+                stroke="url(#circuitGrad)"
+                strokeWidth="2"
+                fill="none"
+              />
             </g>
-            
+
             {/* Additional connection nodes */}
-            <g className="animate-pulse-slow" style={{animationDelay: '1.5s'}}>
+            <g className="animate-pulse-slow" style={{ animationDelay: "1.5s" }}>
               <circle cx="5%" cy="35%" r="4" fill="url(#circuitGrad)" />
               <circle cx="20%" cy="40%" r="4" fill="url(#circuitGrad)" />
               <circle cx="35%" cy="28%" r="4" fill="url(#circuitGrad)" />
@@ -247,14 +248,17 @@ export default function About() {
               <circle cx="95%" cy="32%" r="4" fill="url(#circuitGrad)" />
             </g>
           </svg>
-          
+
           {/* Subtle dot grid overlay */}
-          <div className="absolute inset-0 opacity-25" style={{
-            backgroundImage: `radial-gradient(circle at center, #FFA94D 1.5px, transparent 1.5px)`,
-            backgroundSize: '35px 35px',
-            animation: 'grid-move 25s linear infinite'
-          }} />
-          
+          <div
+            className="absolute inset-0 opacity-25"
+            style={{
+              backgroundImage: `radial-gradient(circle at center, #FFA94D 1.5px, transparent 1.5px)`,
+              backgroundSize: "35px 35px",
+              animation: "grid-move 25s linear infinite",
+            }}
+          />
+
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-5xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
@@ -273,7 +277,7 @@ export default function About() {
                         <input
                           type="file"
                           accept="image/*"
-                          onChange={(e) => handleImageUpload(e, 'hero')}
+                          onChange={(e) => handleImageUpload(e, "hero")}
                           className="hidden"
                         />
                         <Button size="sm" variant="secondary" asChild>
@@ -286,7 +290,7 @@ export default function About() {
                     )}
                   </div>
                 </div>
-                
+
                 {/* Title - Right */}
                 <div className="order-1 md:order-2 text-center md:text-left">
                   <h1 className="text-3xl md:text-5xl font-bold font-body mb-6 bg-gradient-to-r from-[#FFA94D] via-[#FF8C3D] to-[#FF6B2B] bg-clip-text text-transparent leading-tight">
@@ -310,10 +314,16 @@ export default function About() {
                 <h2 className="text-2xl md:text-4xl font-bold font-body mb-8 text-center">
                   I'm Jacopo — And I strongly believe that clarity beats complexity.
                 </h2>
-                
+
                 <div className="prose prose-lg max-w-none text-foreground/80">
                   <p className="leading-relaxed mb-6 text-justify">
-                    Hi I'm Jacopo, Swiss–Italian and endlessly curious. I love the moment an idea clicks; the scribble that turns into a plan, the first draft that suddenly breathes. I write The (un)Stable Net to make sense of markets, tech, and the ways we work; not with hype, but with patient curiosity and useful notes. I'm happiest building small things that make bigger things possible: a tidy workflow, a clear brief, a tool that quietly does its job. What pulls me forward: well-crafted design, honest conversations, and teams that care about the details. I like rooms where people listen, events that actually create serendipity, and dashboards that tell a story at a glance. I enjoy tinkering with AI and finance not for the buzz but for the craft; turning data into something you can feel and use.
+                    Hi I'm Jacopo, Swiss–Italian and endlessly curious. I love the moment an idea clicks; the scribble
+                    that turns into a plan, the first draft that suddenly breathes. I'm happiest building small things
+                    that make bigger things possible: a tidy workflow, a clear brief, a tool that quietly does its job.
+                    What pulls me forward: well-crafted design, honest conversations, and teams that care about the
+                    details. I like rooms where people listen, events that actually create serendipity, and dashboards
+                    that tell a story at a glance. I enjoy tinkering with AI and finance not for the buzz but for the
+                    craft; turning data into something you can feel and use.
                   </p>
                 </div>
               </div>
@@ -331,7 +341,7 @@ export default function About() {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => handleImageUpload(e, 'grid')}
+                        onChange={(e) => handleImageUpload(e, "grid")}
                         className="hidden"
                       />
                       <Button size="sm" variant="secondary" asChild>
@@ -346,10 +356,16 @@ export default function About() {
                 <div className="flex flex-col justify-center space-y-6">
                   <div className="prose prose-lg max-w-none text-foreground/80">
                     <p className="leading-relaxed text-justify">
-                      A life between languages and borders taught me to build bridges; between Italy and Switzerland, between ideas and execution, between vision and everyday habits. I care about clarity, momentum, and kindness. If what I create helps you take the next step, quicker or clearer, I'm happy.
+                      A life between languages and borders taught me to build bridges; between Italy and Switzerland,
+                      between ideas and execution, between vision and everyday habits. I care about clarity, momentum,
+                      and kindness. If what I create helps you take the next step, quicker or clearer, I'm happy.
                     </p>
                     <p className="leading-relaxed text-justify">
-                      Outside work you'll usually find me in the mountains, hiking when the trails are open and skiing all winter. I grew up crisscrossing the Alps, so I'm biased toward early starts, long ridgelines, and the kind of clear air that resets your head. Those days feed the writing here. If you're into thoughtful tools, better workflows, and work that respects people's time, you'll feel at home here.
+                      Outside work you'll usually find me in the mountains, hiking when the trails are open and skiing
+                      all winter. I grew up crisscrossing the Alps, so I'm biased toward early starts, long ridgelines,
+                      and the kind of clear air that resets your head. Those days feed the writing here. If you're into
+                      thoughtful tools, better workflows, and work that respects people's time, you'll feel at home
+                      here.
                     </p>
                   </div>
                 </div>
@@ -359,41 +375,41 @@ export default function About() {
               <div className="bg-gradient-to-br from-[#D4A574]/20 via-[#C89B68]/10 to-[#B8865A]/20 dark:from-[#2a1f15]/50 dark:via-[#3d2a1a]/30 dark:to-[#1f1812]/50 rounded-2xl p-8 md:p-12">
                 <h3 className="text-2xl font-bold font-body mb-8 text-center">Connect with me</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                  <a 
-                    href="https://linkedin.com" 
-                    target="_blank" 
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center gap-3 p-6 bg-background/60 backdrop-blur-sm rounded-xl hover:bg-background/80 transition-all hover:scale-105"
                   >
                     <Linkedin className="w-10 h-10 text-primary" />
                     <span className="text-sm font-body text-foreground">LinkedIn</span>
                   </a>
-                  <a 
-                    href="https://youtube.com" 
-                    target="_blank" 
+                  <a
+                    href="https://youtube.com"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center gap-3 p-6 bg-background/60 backdrop-blur-sm rounded-xl hover:bg-background/80 transition-all hover:scale-105"
                   >
                     <Youtube className="w-10 h-10 text-primary" />
                     <span className="text-sm font-body text-foreground">YouTube</span>
                   </a>
-                  <a 
-                    href="https://github.com" 
-                    target="_blank" 
+                  <a
+                    href="https://github.com"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center gap-3 p-6 bg-background/60 backdrop-blur-sm rounded-xl hover:bg-background/80 transition-all hover:scale-105"
                   >
                     <Github className="w-10 h-10 text-primary" />
                     <span className="text-sm font-body text-foreground">GitHub</span>
                   </a>
-                  <a 
-                    href="https://xing.com" 
-                    target="_blank" 
+                  <a
+                    href="https://xing.com"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center gap-3 p-6 bg-background/60 backdrop-blur-sm rounded-xl hover:bg-background/80 transition-all hover:scale-105"
                   >
                     <svg className="w-10 h-10 text-primary" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/>
+                      <path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z" />
                     </svg>
                     <span className="text-sm font-body text-foreground">Xing</span>
                   </a>
@@ -409,9 +425,7 @@ export default function About() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Ask a Question</DialogTitle>
-            <DialogDescription>
-              Have a question? I'd love to hear from you.
-            </DialogDescription>
+            <DialogDescription>Have a question? I'd love to hear from you.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmitQuestion} className="space-y-4">
             <div>
@@ -449,10 +463,7 @@ export default function About() {
                 className="mt-1 min-h-32"
               />
             </div>
-            <Button
-              type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Send Question
             </Button>
           </form>
