@@ -19,9 +19,15 @@ export default function About() {
   const [heroImage, setHeroImage] = useState("");
   const [gridImage, setGridImage] = useState("");
   const [communityImage, setCommunityImage] = useState("");
+  const [photo1, setPhoto1] = useState("");
+  const [photo2, setPhoto2] = useState("");
+  const [photo3, setPhoto3] = useState("");
   const [heroImageId, setHeroImageId] = useState<number | null>(null);
   const [gridImageId, setGridImageId] = useState<number | null>(null);
   const [communityImageId, setCommunityImageId] = useState<number | null>(null);
+  const [photo1Id, setPhoto1Id] = useState<number | null>(null);
+  const [photo2Id, setPhoto2Id] = useState<number | null>(null);
+  const [photo3Id, setPhoto3Id] = useState<number | null>(null);
   const { toast } = useToast();
 
   // Fetch images from Supabase on mount
@@ -36,6 +42,9 @@ export default function About() {
           const heroData = data.find((img) => img.name === "hero-photo");
           const gridData = data.find((img) => img.name === "grid-photo");
           const communityData = data.find((img) => img.name === "community-photo");
+          const photo1Data = data.find((img) => img.name === "photo1");
+          const photo2Data = data.find((img) => img.name === "photo2");
+          const photo3Data = data.find((img) => img.name === "photo3");
 
           if (heroData) {
             setHeroImage(heroData.image || "");
@@ -49,6 +58,18 @@ export default function About() {
             setCommunityImage(communityData.image || "");
             setCommunityImageId(communityData.id);
           }
+          if (photo1Data) {
+            setPhoto1(photo1Data.image || "");
+            setPhoto1Id(photo1Data.id);
+          }
+          if (photo2Data) {
+            setPhoto2(photo2Data.image || "");
+            setPhoto2Id(photo2Data.id);
+          }
+          if (photo3Data) {
+            setPhoto3(photo3Data.image || "");
+            setPhoto3Id(photo3Data.id);
+          }
         }
       } catch (error) {
         console.error("Error fetching images:", error);
@@ -58,7 +79,7 @@ export default function About() {
     fetchImages();
   }, []);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: "hero" | "grid" | "community") => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: "hero" | "grid" | "community" | "photo1" | "photo2" | "photo3") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -76,8 +97,12 @@ export default function About() {
       } = supabase.storage.from("article-images").getPublicUrl(filePath);
 
       // Update Supabase Covers table
-      const coverName = imageType === "hero" ? "hero-photo" : imageType === "grid" ? "grid-photo" : "community-photo";
-      const coverId = imageType === "hero" ? heroImageId : imageType === "grid" ? gridImageId : communityImageId;
+      const coverName = imageType;
+      const coverId = imageType === "hero" ? heroImageId : 
+                      imageType === "grid" ? gridImageId : 
+                      imageType === "community" ? communityImageId :
+                      imageType === "photo1" ? photo1Id :
+                      imageType === "photo2" ? photo2Id : photo3Id;
 
       if (coverId) {
         // Update existing record
@@ -99,23 +124,21 @@ export default function About() {
         if (insertError) throw insertError;
 
         if (newCover) {
-          if (imageType === "hero") {
-            setHeroImageId(newCover.id);
-          } else if (imageType === "grid") {
-            setGridImageId(newCover.id);
-          } else {
-            setCommunityImageId(newCover.id);
-          }
+          if (imageType === "hero") setHeroImageId(newCover.id);
+          else if (imageType === "grid") setGridImageId(newCover.id);
+          else if (imageType === "community") setCommunityImageId(newCover.id);
+          else if (imageType === "photo1") setPhoto1Id(newCover.id);
+          else if (imageType === "photo2") setPhoto2Id(newCover.id);
+          else if (imageType === "photo3") setPhoto3Id(newCover.id);
         }
       }
 
-      if (imageType === "hero") {
-        setHeroImage(publicUrl);
-      } else if (imageType === "grid") {
-        setGridImage(publicUrl);
-      } else {
-        setCommunityImage(publicUrl);
-      }
+      if (imageType === "hero") setHeroImage(publicUrl);
+      else if (imageType === "grid") setGridImage(publicUrl);
+      else if (imageType === "community") setCommunityImage(publicUrl);
+      else if (imageType === "photo1") setPhoto1(publicUrl);
+      else if (imageType === "photo2") setPhoto2(publicUrl);
+      else if (imageType === "photo3") setPhoto3(publicUrl);
 
       toast({
         title: "Image uploaded",
@@ -163,153 +186,46 @@ export default function About() {
     <>
       {/* Main Content */}
       <main className="flex-1">
-        {/* Hero Section with Title */}
-        <div className="relative py-20 md:py-32 overflow-hidden">
-          {/* Base gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#D4A574] via-[#C89B68] to-[#B8865A] dark:from-[#2a1f15] dark:via-[#3d2a1a] dark:to-[#1f1812]" />
-
-          {/* Circuit board pattern overlay */}
-          <svg className="absolute inset-0 w-full h-full opacity-40" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FFA94D" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="#FFBE7B" stopOpacity="0.7" />
-                <stop offset="100%" stopColor="#FFD6A5" stopOpacity="0.5" />
-              </linearGradient>
-            </defs>
-
-            {/* Vertical circuit lines */}
-            <g className="animate-pulse-slow">
-              <line x1="10%" y1="0" x2="10%" y2="100%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <circle cx="10%" cy="15%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="10%" cy="45%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="10%" cy="75%" r="5" fill="url(#circuitGrad)" />
-
-              <line x1="25%" y1="0" x2="25%" y2="85%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <circle cx="25%" cy="20%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="25%" cy="55%" r="5" fill="url(#circuitGrad)" />
-
-              <line x1="40%" y1="0" x2="40%" y2="100%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <circle cx="40%" cy="25%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="40%" cy="60%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="40%" cy="90%" r="5" fill="url(#circuitGrad)" />
-
-              <line x1="55%" y1="0" x2="55%" y2="80%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <circle cx="55%" cy="18%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="55%" cy="50%" r="5" fill="url(#circuitGrad)" />
-
-              <line x1="70%" y1="0" x2="70%" y2="100%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <circle cx="70%" cy="30%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="70%" cy="65%" r="5" fill="url(#circuitGrad)" />
-
-              <line x1="85%" y1="0" x2="85%" y2="90%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <circle cx="85%" cy="22%" r="5" fill="url(#circuitGrad)" />
-              <circle cx="85%" cy="58%" r="5" fill="url(#circuitGrad)" />
-            </g>
-
-            {/* Horizontal connecting lines */}
-            <g className="animate-pulse-slow" style={{ animationDelay: "0.5s" }}>
-              <line x1="0" y1="20%" x2="100%" y2="20%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <line x1="15%" y1="50%" x2="95%" y2="50%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <line x1="0" y1="75%" x2="85%" y2="75%" stroke="url(#circuitGrad)" strokeWidth="2" />
-              <line x1="20%" y1="90%" x2="100%" y2="90%" stroke="url(#circuitGrad)" strokeWidth="2" />
-            </g>
-
-            {/* Hexagon shapes */}
-            <g className="animate-float">
-              <polygon
-                points="150,100 175,115 175,145 150,160 125,145 125,115"
-                fill="none"
-                stroke="url(#circuitGrad)"
-                strokeWidth="2.5"
-              />
-              <polygon
-                points="450,250 485,272 485,316 450,338 415,316 415,272"
-                fill="none"
-                stroke="url(#circuitGrad)"
-                strokeWidth="2.5"
-              />
-              <polygon
-                points="800,150 830,167 830,201 800,218 770,201 770,167"
-                fill="none"
-                stroke="url(#circuitGrad)"
-                strokeWidth="2.5"
-              />
-            </g>
-
-            {/* Diagonal circuit paths */}
-            <g className="animate-pulse-slow" style={{ animationDelay: "1s" }}>
-              <path d="M 0 100 L 100 130 L 200 120 L 300 145" stroke="url(#circuitGrad)" strokeWidth="2" fill="none" />
-              <path
-                d="M 200 250 L 350 270 L 500 265 L 650 280"
-                stroke="url(#circuitGrad)"
-                strokeWidth="2"
-                fill="none"
-              />
-            </g>
-
-            {/* Additional connection nodes */}
-            <g className="animate-pulse-slow" style={{ animationDelay: "1.5s" }}>
-              <circle cx="5%" cy="35%" r="4" fill="url(#circuitGrad)" />
-              <circle cx="20%" cy="40%" r="4" fill="url(#circuitGrad)" />
-              <circle cx="35%" cy="28%" r="4" fill="url(#circuitGrad)" />
-              <circle cx="50%" cy="42%" r="4" fill="url(#circuitGrad)" />
-              <circle cx="65%" cy="38%" r="4" fill="url(#circuitGrad)" />
-              <circle cx="80%" cy="45%" r="4" fill="url(#circuitGrad)" />
-              <circle cx="95%" cy="32%" r="4" fill="url(#circuitGrad)" />
-            </g>
-          </svg>
-
-          {/* Subtle dot grid overlay */}
-          <div
-            className="absolute inset-0 opacity-25"
-            style={{
-              backgroundImage: `radial-gradient(circle at center, #FFA94D 1.5px, transparent 1.5px)`,
-              backgroundSize: "35px 35px",
-              animation: "grid-move 25s linear infinite",
-            }}
-          />
-
+        {/* Split Hero Section - Half Text, Half Photo */}
+        <div className="relative py-12 md:py-20 overflow-hidden">
           <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-5xl mx-auto">
-              <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-                {/* Photo Space - Left */}
-                <div className="order-2 md:order-1">
-                  <div className="relative aspect-square rounded-full overflow-hidden bg-background/20 backdrop-blur-sm border-8 border-background/40">
-                    {heroImage ? (
-                      <img src={heroImage} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-foreground/40 text-lg font-body">
-                        Photo placeholder
-                      </div>
-                    )}
-                    {isEditorMode && (
-                      <label className="absolute bottom-4 right-4 cursor-pointer">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleImageUpload(e, "hero")}
-                          className="hidden"
-                        />
-                        <Button size="sm" variant="secondary" asChild>
-                          <span>
-                            <Upload className="w-4 h-4 mr-2" />
-                            Upload
-                          </span>
-                        </Button>
-                      </label>
-                    )}
-                  </div>
-                </div>
-
-                {/* Title - Right */}
-                <div className="order-1 md:order-2 text-center md:text-left">
+            <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                {/* Left: Title Text */}
+                <div className="order-1">
                   <h1 className="text-3xl md:text-5xl font-bold font-body mb-6 bg-gradient-to-r from-[#FFA94D] via-[#FF8C3D] to-[#FF6B2B] bg-clip-text text-transparent leading-tight">
                     In the end it always comes down to the same old tradeoff:
                   </h1>
                   <p className="text-xl md:text-2xl font-body text-foreground/90 italic">
                     what's more valuable for you time or money?
                   </p>
+                </div>
+
+                {/* Right: Hero Photo */}
+                <div className="order-2 relative">
+                  <div className="relative aspect-square transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                    {heroImage ? (
+                      <img src={heroImage} alt="Profile" className="w-full h-full object-cover shadow-2xl" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center shadow-2xl">
+                        <span className="text-muted-foreground text-lg font-body">Upload Hero Photo</span>
+                      </div>
+                    )}
+                    {isEditorMode && (
+                      <label className="absolute -top-2 -right-2 cursor-pointer z-10">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, "hero")}
+                          className="hidden"
+                        />
+                        <Button size="sm" variant="secondary">
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload
+                        </Button>
+                      </label>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -339,72 +255,78 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Photo Grid Section */}
-              <div className="grid md:grid-cols-2 gap-8 mb-16">
-                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 aspect-square flex items-center justify-center relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
-                  {gridImage ? (
-                    <img src={gridImage} alt="About" className="w-full h-full object-cover rounded-lg" />
-                  ) : (
-                    <span className="text-muted-foreground text-lg font-body">Photo placeholder</span>
-                  )}
-                  {isEditorMode && (
-                    <label className="absolute bottom-4 right-4 cursor-pointer">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageUpload(e, "grid")}
-                        className="hidden"
-                      />
-                      <Button size="sm" variant="secondary" asChild>
-                        <span>
+              {/* Photo Grid Section - Angled, No Frames */}
+              <div className="grid md:grid-cols-3 gap-8 mb-16">
+                {[
+                  { image: photo1, id: photo1Id, type: 'photo1' as const, rotation: '-rotate-2' },
+                  { image: photo2, id: photo2Id, type: 'photo2' as const, rotation: 'rotate-3' },
+                  { image: photo3, id: photo3Id, type: 'photo3' as const, rotation: '-rotate-1' },
+                ].map((photo) => (
+                  <div key={photo.type} className="relative">
+                    <div className={`aspect-[4/5] overflow-hidden shadow-2xl transform ${photo.rotation} hover:rotate-0 transition-all duration-300 hover:scale-105`}>
+                      {photo.image ? (
+                        <img src={photo.image} alt={`Photo ${photo.type}`} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
+                          <span className="text-muted-foreground text-sm font-body">Upload Photo</span>
+                        </div>
+                      )}
+                    </div>
+                    {isEditorMode && (
+                      <label className="absolute -top-2 -right-2 cursor-pointer z-10">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, photo.type)}
+                          className="hidden"
+                        />
+                        <Button size="sm" variant="secondary">
                           <Upload className="w-4 h-4 mr-2" />
                           Upload
-                        </span>
-                      </Button>
-                    </label>
-                  )}
-                </div>
-                <div className="flex flex-col justify-center space-y-6 animate-fade-in">
-                  <div className="prose prose-lg max-w-none text-foreground/80">
-                    <p className="leading-relaxed text-justify">
-                      A life between languages and borders taught me to build bridges; between Italy and Switzerland,
-                      between ideas and execution, between vision and everyday habits. I care about clarity, momentum,
-                      and kindness. If what I create helps you take the next step, quicker or clearer, I'm happy.
-                    </p>
-                    <p className="leading-relaxed text-justify">
-                      Outside work you'll usually find me in the mountains, hiking when the trails are open and skiing
-                      all winter. I grew up crisscrossing the Alps, so I'm biased toward early starts, long ridgelines,
-                      and the kind of clear air that resets your head. Those days feed the writing here. If you're into
-                      thoughtful tools, better workflows, and work that respects people's time, you'll feel at home
-                      here.
-                    </p>
+                        </Button>
+                      </label>
+                    )}
                   </div>
-                </div>
+                ))}
+              </div>
+
+              {/* Text Section */}
+              <div className="mb-16 prose prose-lg max-w-none text-foreground/80">
+                <p className="leading-relaxed text-justify">
+                  A life between languages and borders taught me to build bridges; between Italy and Switzerland,
+                  between ideas and execution, between vision and everyday habits. I care about clarity, momentum,
+                  and kindness. If what I create helps you take the next step, quicker or clearer, I'm happy.
+                </p>
+                <p className="leading-relaxed text-justify">
+                  Outside work you'll usually find me in the mountains, hiking when the trails are open and skiing
+                  all winter. I grew up crisscrossing the Alps, so I'm biased toward early starts, long ridgelines,
+                  and the kind of clear air that resets your head. Those days feed the writing here. If you're into
+                  thoughtful tools, better workflows, and work that respects people's time, you'll feel at home
+                  here.
+                </p>
               </div>
 
               {/* Community Section with Cover Image */}
               <div className="mb-16 space-y-8">
-                <div className="relative rounded-2xl overflow-hidden h-64 md:h-96 group">
+                <div className="relative overflow-hidden h-64 md:h-96 shadow-2xl transform -rotate-1 hover:rotate-0 transition-transform duration-300">
                   {communityImage ? (
-                    <img src={communityImage} alt="Community" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img src={communityImage} alt="Community" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center">
                       <span className="text-muted-foreground text-lg font-body">Community Cover Image</span>
                     </div>
                   )}
                   {isEditorMode && (
-                    <label className="absolute bottom-4 right-4 cursor-pointer z-10">
+                    <label className="absolute -top-2 -right-2 cursor-pointer z-10">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleImageUpload(e, "community")}
                         className="hidden"
                       />
-                      <Button size="sm" variant="secondary" asChild>
-                        <span>
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload
-                        </span>
+                      <Button size="sm" variant="secondary">
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload
                       </Button>
                     </label>
                   )}
@@ -420,9 +342,28 @@ export default function About() {
                   <p className="leading-relaxed text-justify mb-6">
                     This is a living project. I ship small improvements often: new briefs, tighter frameworks, practical AI workflows to try, and occasional deep dives from a European perspective, mostly Switzerland and Italy. Expect short, readable pieces that cut through noise, simple tools you can reuse with your team, and reflections that stay close to real world constraints and the next step. The goal is always the same: turn scattered signals into something helpful you can apply this week.
                   </p>
-                  <p className="leading-relaxed text-justify">
+                  <p className="leading-relaxed text-justify mb-6">
                     If that resonates, follow along, ask questions, challenge assumptions and share what you are learning. Your feedback, corrections and ideas shape what comes next: features, formats and topics. I will keep it practical, collaborative and kind, so we can make the work better together.
                   </p>
+                </div>
+
+                {/* Contribution and Resources Buttons */}
+                <div className="flex flex-wrap gap-4 justify-center pt-4">
+                  <Button 
+                    size="lg" 
+                    className="shadow-lg hover:shadow-xl transition-shadow"
+                    onClick={() => window.location.href = '/contribute'}
+                  >
+                    Contribute Your Ideas
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="shadow-lg hover:shadow-xl transition-shadow"
+                    onClick={() => window.location.href = '/articles'}
+                  >
+                    Browse Resources
+                  </Button>
                 </div>
               </div>
 
