@@ -29,6 +29,7 @@ export const Navbar = () => {
   
   const isHomePage = location.pathname === "/";
   const isAboutPage = location.pathname === "/about";
+  const isResourcesPage = location.pathname === "/resources";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -131,6 +132,8 @@ export const Navbar = () => {
             >
               Ask questions
             </Button>
+          ) : isResourcesPage ? (
+            <></>
           ) : (
             <>
               <button
@@ -193,6 +196,8 @@ export const Navbar = () => {
               >
                 Ask questions
               </Button>
+            ) : isResourcesPage ? (
+              <></>
             ) : (
               <>
                 <button

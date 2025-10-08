@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useEditor } from "@/contexts/EditorContext";
+import { Navbar } from "@/components/Navbar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -151,15 +152,7 @@ export default function Resources() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-background border-b">
-        <div className="container mx-auto px-4 py-4">
-          <a href="/" className="flex items-center gap-2 w-fit hover:opacity-80 transition-opacity">
-            <span className="text-2xl font-bold text-primary">TSN</span>
-            <span className="text-lg">The (un)Stable Net</span>
-          </a>
-        </div>
-      </div>
+      <Navbar />
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16 md:py-24">
