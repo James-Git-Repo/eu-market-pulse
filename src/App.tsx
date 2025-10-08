@@ -18,6 +18,7 @@ import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import MigrateCovers from "./pages/MigrateCovers";
 import About from "./pages/About";
+import Resources from "./pages/Resources";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/subscribe" element={<Subscribe />} />
               <Route path="/contribute" element={<Contribute />} />
               <Route path="/about" element={<About />} />
+              <Route path="/resources" element={<Resources />} />
               <Route path="/legal/terms" element={<Terms />} />
               <Route path="/legal/privacy" element={<Privacy />} />
               <Route path="/migrate-covers" element={<MigrateCovers />} />

@@ -360,7 +360,7 @@ export default function About() {
                     size="lg" 
                     variant="outline"
                     className="shadow-lg hover:shadow-xl transition-shadow"
-                    onClick={() => window.location.href = '/articles'}
+                    onClick={() => window.location.href = '/resources'}
                   >
                     Browse Resources
                   </Button>

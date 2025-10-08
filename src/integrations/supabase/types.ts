@@ -155,6 +155,42 @@ export type Database = {
         }
         Relationships: []
       }
+      Resources: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: number
+          metadata: string | null
+          sort_order: number | null
+          title: string
+          url: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: never
+          metadata?: string | null
+          sort_order?: number | null
+          title: string
+          url?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: never
+          metadata?: string | null
+          sort_order?: number | null
+          title?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
