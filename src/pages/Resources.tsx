@@ -153,14 +153,11 @@ export default function Resources() {
     <main className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-background border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
+        <div className="container mx-auto px-4 py-4">
+          <a href="/" className="flex items-center gap-2 w-fit hover:opacity-80 transition-opacity">
             <span className="text-2xl font-bold text-primary">TSN</span>
             <span className="text-lg">The (un)Stable Net</span>
-          </div>
-          <Button variant="default" size="lg" asChild>
-            <a href="/subscribe">Subscribe</a>
-          </Button>
+          </a>
         </div>
       </div>
 
