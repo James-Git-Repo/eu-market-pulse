@@ -231,26 +231,32 @@ export default function About() {
                 {/* Right: Hero Photo */}
                 <div className="order-2 relative">
                   <div className="relative aspect-square transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                    {heroImage ? (
-                      <img src={heroImage} alt="Profile" className="w-full h-full object-cover shadow-2xl" />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center shadow-2xl">
-                        <span className="text-muted-foreground text-lg font-body">Upload Hero Photo</span>
-                      </div>
-                    )}
-                    {isEditorMode && (
-                      <label className="absolute -top-2 -right-2 cursor-pointer z-10">
+                    {isEditorMode ? (
+                      <label className="cursor-pointer block w-full h-full">
                         <input
                           type="file"
                           accept="image/*"
                           onChange={(e) => handleImageUpload(e, "hero")}
                           className="hidden"
                         />
-                        <Button size="sm" variant="secondary">
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload
-                        </Button>
+                        {heroImage ? (
+                          <img src={heroImage} alt="Profile" className="w-full h-full object-cover shadow-2xl" />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center shadow-2xl">
+                            <span className="text-muted-foreground text-lg font-body">Click to Upload Hero Photo</span>
+                          </div>
+                        )}
                       </label>
+                    ) : (
+                      <>
+                        {heroImage ? (
+                          <img src={heroImage} alt="Profile" className="w-full h-full object-cover shadow-2xl" />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center shadow-2xl">
+                            <span className="text-muted-foreground text-lg font-body">Hero Photo</span>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -291,28 +297,34 @@ export default function About() {
                 ].map((photo) => (
                   <div key={photo.type} className="relative">
                     <div className={`aspect-[4/5] overflow-hidden shadow-2xl transform ${photo.rotation} hover:rotate-0 transition-all duration-300 hover:scale-105`}>
-                      {photo.image ? (
-                        <img src={photo.image} alt={`Photo ${photo.type}`} className="w-full h-full object-cover" />
+                      {isEditorMode ? (
+                        <label className="cursor-pointer block w-full h-full">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleImageUpload(e, photo.type)}
+                            className="hidden"
+                          />
+                          {photo.image ? (
+                            <img src={photo.image} alt={`Photo ${photo.type}`} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
+                              <span className="text-muted-foreground text-sm font-body">Click to Upload Photo</span>
+                            </div>
+                          )}
+                        </label>
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                          <span className="text-muted-foreground text-sm font-body">Upload Photo</span>
-                        </div>
+                        <>
+                          {photo.image ? (
+                            <img src={photo.image} alt={`Photo ${photo.type}`} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
+                              <span className="text-muted-foreground text-sm font-body">Photo</span>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
-                    {isEditorMode && (
-                      <label className="absolute -top-2 -right-2 cursor-pointer z-10">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleImageUpload(e, photo.type)}
-                          className="hidden"
-                        />
-                        <Button size="sm" variant="secondary">
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload
-                        </Button>
-                      </label>
-                    )}
                   </div>
                 ))}
               </div>
@@ -336,26 +348,32 @@ export default function About() {
               {/* Community Section with Cover Image */}
               <div className="mb-16 space-y-8">
                 <div className="relative overflow-hidden h-64 md:h-96 shadow-2xl transform -rotate-1 hover:rotate-0 transition-transform duration-300">
-                  {communityImage ? (
-                    <img src={communityImage} alt="Community" className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center">
-                      <span className="text-muted-foreground text-lg font-body">Community Cover Image</span>
-                    </div>
-                  )}
-                  {isEditorMode && (
-                    <label className="absolute -top-2 -right-2 cursor-pointer z-10">
+                  {isEditorMode ? (
+                    <label className="cursor-pointer block w-full h-full">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleImageUpload(e, "community")}
                         className="hidden"
                       />
-                      <Button size="sm" variant="secondary">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Upload
-                      </Button>
+                      {communityImage ? (
+                        <img src={communityImage} alt="Community" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center">
+                          <span className="text-muted-foreground text-lg font-body">Click to Upload Community Cover</span>
+                        </div>
+                      )}
                     </label>
+                  ) : (
+                    <>
+                      {communityImage ? (
+                        <img src={communityImage} alt="Community" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center">
+                          <span className="text-muted-foreground text-lg font-body">Community Cover Image</span>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
                 
