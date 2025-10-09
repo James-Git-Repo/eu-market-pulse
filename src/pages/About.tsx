@@ -85,18 +85,28 @@ export default function About() {
 
     try {
       const fileExt = file.name.split(".").pop();
-      const fileName = `about-${imageType}-${Math.random()}.${fileExt}`;
+      const fileName = `about-${imageType}-${Date.now()}.${fileExt}`;
       const filePath = `about-images/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage.from("article-images").upload(filePath, file);
+      // Upload to storage
+      const { error: uploadError } = await supabase.storage.from("article-images").upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Storage upload error:", uploadError);
+        throw uploadError;
+      }
 
+      // Get public URL
       const {
         data: { publicUrl },
       } = supabase.storage.from("article-images").getPublicUrl(filePath);
 
-      // Update Supabase Covers table
+      console.log("Public URL:", publicUrl);
+
+      // Determine cover name and ID
       const coverName = imageType;
       const coverId = imageType === "hero" ? heroImageId : 
                       imageType === "grid" ? gridImageId : 
@@ -106,11 +116,19 @@ export default function About() {
 
       if (coverId) {
         // Update existing record
-        const { error: updateError } = await supabase.from("Covers").update({ image: publicUrl }).eq("id", coverId);
+        console.log("Updating existing cover:", coverId);
+        const { error: updateError } = await supabase
+          .from("Covers")
+          .update({ image: publicUrl })
+          .eq("id", coverId);
 
-        if (updateError) throw updateError;
+        if (updateError) {
+          console.error("Update error:", updateError);
+          throw updateError;
+        }
       } else {
         // Insert new record
+        console.log("Inserting new cover");
         const { data: newCover, error: insertError } = await supabase
           .from("Covers")
           .insert({
@@ -121,9 +139,13 @@ export default function About() {
           .select()
           .single();
 
-        if (insertError) throw insertError;
+        if (insertError) {
+          console.error("Insert error:", insertError);
+          throw insertError;
+        }
 
         if (newCover) {
+          console.log("New cover created:", newCover);
           if (imageType === "hero") setHeroImageId(newCover.id);
           else if (imageType === "grid") setGridImageId(newCover.id);
           else if (imageType === "community") setCommunityImageId(newCover.id);
@@ -133,6 +155,7 @@ export default function About() {
         }
       }
 
+      // Update local state
       if (imageType === "hero") setHeroImage(publicUrl);
       else if (imageType === "grid") setGridImage(publicUrl);
       else if (imageType === "community") setCommunityImage(publicUrl);
@@ -145,9 +168,10 @@ export default function About() {
         description: "Your photo has been uploaded and saved successfully.",
       });
     } catch (error) {
+      console.error("Upload error:", error);
       toast({
         title: "Upload failed",
-        description: "Failed to upload image. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to upload image. Please try again.",
         variant: "destructive",
       });
     }
