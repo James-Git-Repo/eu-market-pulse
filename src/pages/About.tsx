@@ -283,7 +283,7 @@ export default function About() {
               {/* Introduction */}
               <div className="mb-16">
                 <h2 className="text-2xl md:text-4xl font-bold font-body mb-8 text-center">
-                  Welcome to the TSN project: the space where I channel my passions and skills into meaningful projects.
+                  Welcome to the TSN project: the space where I channel my passions and skills into meaningful outputs.
                 </h2>
 
                 <div className="prose prose-lg max-w-none text-foreground/80">
