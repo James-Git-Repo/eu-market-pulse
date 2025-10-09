@@ -79,7 +79,10 @@ export default function About() {
     fetchImages();
   }, []);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: "hero" | "grid" | "community" | "photo1" | "photo2" | "photo3") => {
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    imageType: "hero" | "grid" | "community" | "photo1" | "photo2" | "photo3",
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -90,8 +93,8 @@ export default function About() {
 
       // Upload to storage
       const { error: uploadError } = await supabase.storage.from("article-images").upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false
+        cacheControl: "3600",
+        upsert: false,
       });
 
       if (uploadError) {
@@ -107,23 +110,31 @@ export default function About() {
       console.log("Public URL:", publicUrl);
 
       // Determine cover name and ID - match database naming convention
-      const coverName = imageType === "hero" ? "hero-photo" :
-                        imageType === "grid" ? "grid-photo" :
-                        imageType === "community" ? "community-photo" :
-                        imageType;
-      const coverId = imageType === "hero" ? heroImageId : 
-                      imageType === "grid" ? gridImageId : 
-                      imageType === "community" ? communityImageId :
-                      imageType === "photo1" ? photo1Id :
-                      imageType === "photo2" ? photo2Id : photo3Id;
+      const coverName =
+        imageType === "hero"
+          ? "hero-photo"
+          : imageType === "grid"
+            ? "grid-photo"
+            : imageType === "community"
+              ? "community-photo"
+              : imageType;
+      const coverId =
+        imageType === "hero"
+          ? heroImageId
+          : imageType === "grid"
+            ? gridImageId
+            : imageType === "community"
+              ? communityImageId
+              : imageType === "photo1"
+                ? photo1Id
+                : imageType === "photo2"
+                  ? photo2Id
+                  : photo3Id;
 
       if (coverId) {
         // Update existing record
         console.log("Updating existing cover:", coverId);
-        const { error: updateError } = await supabase
-          .from("Covers")
-          .update({ image: publicUrl })
-          .eq("id", coverId);
+        const { error: updateError } = await supabase.from("Covers").update({ image: publicUrl }).eq("id", coverId);
 
         if (updateError) {
           console.error("Update error:", updateError);
@@ -272,7 +283,7 @@ export default function About() {
               {/* Introduction */}
               <div className="mb-16">
                 <h2 className="text-2xl md:text-4xl font-bold font-body mb-8 text-center">
-                  I'm Jacopo — And I strongly believe that clarity beats complexity.
+                  Welcome to the TSN project: the space where I channel my passions and skills into meaningful projects.
                 </h2>
 
                 <div className="prose prose-lg max-w-none text-foreground/80">
@@ -291,12 +302,14 @@ export default function About() {
               {/* Photo Grid Section - Angled, No Frames */}
               <div className="grid md:grid-cols-3 gap-8 mb-16">
                 {[
-                  { image: photo1, id: photo1Id, type: 'photo1' as const, rotation: '-rotate-2' },
-                  { image: photo2, id: photo2Id, type: 'photo2' as const, rotation: 'rotate-3' },
-                  { image: photo3, id: photo3Id, type: 'photo3' as const, rotation: '-rotate-1' },
+                  { image: photo1, id: photo1Id, type: "photo1" as const, rotation: "-rotate-2" },
+                  { image: photo2, id: photo2Id, type: "photo2" as const, rotation: "rotate-3" },
+                  { image: photo3, id: photo3Id, type: "photo3" as const, rotation: "-rotate-1" },
                 ].map((photo) => (
                   <div key={photo.type} className="relative">
-                    <div className={`aspect-[4/5] overflow-hidden shadow-2xl transform ${photo.rotation} hover:rotate-0 transition-all duration-300 hover:scale-105`}>
+                    <div
+                      className={`aspect-[4/5] overflow-hidden shadow-2xl transform ${photo.rotation} hover:rotate-0 transition-all duration-300 hover:scale-105`}
+                    >
                       {isEditorMode ? (
                         <label className="cursor-pointer block w-full h-full">
                           <input
@@ -333,15 +346,14 @@ export default function About() {
               <div className="mb-16 prose prose-lg max-w-none text-foreground/80">
                 <p className="leading-relaxed text-justify">
                   A life between languages and borders taught me to build bridges; between Italy and Switzerland,
-                  between ideas and execution, between vision and everyday habits. I care about clarity, momentum,
-                  and kindness. If what I create helps you take the next step, quicker or clearer, I'm happy.
+                  between ideas and execution, between vision and everyday habits. I care about clarity, momentum, and
+                  kindness. If what I create helps you take the next step, quicker or clearer, I'm happy.
                 </p>
                 <p className="leading-relaxed text-justify">
-                  Outside work you'll usually find me in the mountains, hiking when the trails are open and skiing
-                  all winter. I grew up crisscrossing the Alps, so I'm biased toward early starts, long ridgelines,
-                  and the kind of clear air that resets your head. Those days feed the writing here. If you're into
-                  thoughtful tools, better workflows, and work that respects people's time, you'll feel at home
-                  here.
+                  Outside work you'll usually find me in the mountains, hiking when the trails are open and skiing all
+                  winter. I grew up crisscrossing the Alps, so I'm biased toward early starts, long ridgelines, and the
+                  kind of clear air that resets your head. Those days feed the writing here. If you're into thoughtful
+                  tools, better workflows, and work that respects people's time, you'll feel at home here.
                 </p>
               </div>
 
@@ -360,7 +372,9 @@ export default function About() {
                         <img src={communityImage} alt="Community" className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-[#D4A574]/30 via-[#C89B68]/20 to-[#B8865A]/30 flex items-center justify-center">
-                          <span className="text-muted-foreground text-lg font-body">Click to Upload Community Cover</span>
+                          <span className="text-muted-foreground text-lg font-body">
+                            Click to Upload Community Cover
+                          </span>
                         </div>
                       )}
                     </label>
@@ -376,36 +390,46 @@ export default function About() {
                     </>
                   )}
                 </div>
-                
+
                 <div className="prose prose-lg max-w-none text-foreground/80 animate-fade-in">
                   <h2 className="text-3xl md:text-4xl font-bold font-body mb-6 bg-gradient-to-r from-[#FFA94D] via-[#FF8C3D] to-[#FF6B2B] bg-clip-text text-transparent">
                     Join the community. Let's grow together.
                   </h2>
                   <p className="leading-relaxed text-justify mb-6">
-                    Join the community. Let's grow together and become more knowledgeable innovators, entrepreneurs, professionals and, first of all, better people. The (un)Stable Net is a collaborative project shaped by my long running curiosity for innovation and finance. I use it to make sense of markets, technology and the ways we work, not with hype but with patient curiosity, clear sources and notes you can actually use.
+                    Join the community. Let's grow together and become more knowledgeable innovators, entrepreneurs,
+                    professionals and, first of all, better people. The (un)Stable Net is a collaborative project shaped
+                    by my long running curiosity for innovation and finance. I use it to make sense of markets,
+                    technology and the ways we work, not with hype but with patient curiosity, clear sources and notes
+                    you can actually use.
                   </p>
                   <p className="leading-relaxed text-justify mb-6">
-                    This is a living project. I ship small improvements often: new briefs, tighter frameworks, practical AI workflows to try, and occasional deep dives from a European perspective, mostly Switzerland and Italy. Expect short, readable pieces that cut through noise, simple tools you can reuse with your team, and reflections that stay close to real world constraints and the next step. The goal is always the same: turn scattered signals into something helpful you can apply this week.
+                    This is a living project. I ship small improvements often: new briefs, tighter frameworks, practical
+                    AI workflows to try, and occasional deep dives from a European perspective, mostly Switzerland and
+                    Italy. Expect short, readable pieces that cut through noise, simple tools you can reuse with your
+                    team, and reflections that stay close to real world constraints and the next step. The goal is
+                    always the same: turn scattered signals into something helpful you can apply this week.
                   </p>
                   <p className="leading-relaxed text-justify mb-6">
-                    If that resonates, follow along, ask questions, challenge assumptions and share what you are learning. Your feedback, corrections and ideas shape what comes next: features, formats and topics. I will keep it practical, collaborative and kind, so we can make the work better together.
+                    If that resonates, follow along, ask questions, challenge assumptions and share what you are
+                    learning. Your feedback, corrections and ideas shape what comes next: features, formats and topics.
+                    I will keep it practical, collaborative and kind, so we can make the work better together.
                   </p>
                 </div>
 
                 {/* Contribution and Resources Buttons */}
                 <div className="flex flex-wrap gap-4 justify-center pt-4">
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     className="shadow-lg hover:shadow-xl transition-shadow"
-                    onClick={() => window.location.href = '/contribute'}
+                    onClick={() => (window.location.href = "/contribute")}
                   >
                     Contribute Your Ideas
                   </Button>
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     variant="outline"
                     className="shadow-lg hover:shadow-xl transition-shadow"
-                    onClick={() => window.location.href = '/resources'}
+                    onClick={() => (window.location.href = "/resources")}
                   >
                     Browse Resources
                   </Button>
