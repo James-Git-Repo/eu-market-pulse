@@ -152,14 +152,12 @@ export default function Resources() {
 
   return (
     <main className="min-h-screen bg-background">
-      <Navbar />
-
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16 md:py-24">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary mb-6">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary mb-6 font-body">
           Dive deeper into markets
         </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground">
+        <p className="text-xl md:text-2xl text-muted-foreground font-body">
           Quick, vetted picks to get smart fast
         </p>
       </div>
@@ -167,7 +165,7 @@ export default function Resources() {
       {/* Podcasts Section */}
       {podcasts.length > 0 && (
         <div className="container mx-auto px-4 py-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8">Podcasts</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8 font-body">Podcasts</h2>
           <div className="space-y-4">
             {podcasts.map((resource) => (
               <div
@@ -179,9 +177,9 @@ export default function Resources() {
                     {getCategoryIcon(resource.category)}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-2">{resource.title}</h3>
+                    <h3 className="text-xl font-semibold mb-2 font-body">{resource.title}</h3>
                     {resource.description && (
-                      <p className="text-muted-foreground">{resource.description}</p>
+                      <p className="text-muted-foreground font-body">{resource.description}</p>
                     )}
                   </div>
                   {resource.metadata && (
@@ -213,7 +211,7 @@ export default function Resources() {
       {/* Articles Section */}
       {articles.length > 0 && (
         <div className="container mx-auto px-4 py-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8">Articles</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8 font-body">Articles</h2>
           <div className="space-y-4">
             {articles.map((resource) => (
               <div
@@ -225,9 +223,9 @@ export default function Resources() {
                     {getCategoryIcon(resource.category)}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-2">{resource.title}</h3>
+                    <h3 className="text-xl font-semibold mb-2 font-body">{resource.title}</h3>
                     {resource.description && (
-                      <p className="text-muted-foreground">{resource.description}</p>
+                      <p className="text-muted-foreground font-body">{resource.description}</p>
                     )}
                   </div>
                   {resource.metadata && (
@@ -259,7 +257,7 @@ export default function Resources() {
       {/* Tools & Links Section */}
       {tools.length > 0 && (
         <div className="container mx-auto px-4 py-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8">Tools & Links</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8 font-body">Tools & Links</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {tools.map((resource) => (
               <div
@@ -271,7 +269,7 @@ export default function Resources() {
                     {getCategoryIcon(resource.category)}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold">{resource.title}</h3>
+                    <h3 className="text-lg font-semibold font-body">{resource.title}</h3>
                   </div>
                   {isEditorMode && (
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
