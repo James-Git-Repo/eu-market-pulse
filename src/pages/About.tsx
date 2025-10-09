@@ -106,8 +106,11 @@ export default function About() {
 
       console.log("Public URL:", publicUrl);
 
-      // Determine cover name and ID
-      const coverName = imageType;
+      // Determine cover name and ID - match database naming convention
+      const coverName = imageType === "hero" ? "hero-photo" :
+                        imageType === "grid" ? "grid-photo" :
+                        imageType === "community" ? "community-photo" :
+                        imageType;
       const coverId = imageType === "hero" ? heroImageId : 
                       imageType === "grid" ? gridImageId : 
                       imageType === "community" ? communityImageId :
