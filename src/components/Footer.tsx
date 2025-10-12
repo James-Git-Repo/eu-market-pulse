@@ -16,34 +16,42 @@ export const Footer = () => {
                 href="https://linkedin.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 bg-foreground text-background rounded-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                className="flex items-center gap-3 group"
               >
-                <Linkedin className="w-6 h-6" />
+                <div className="w-12 h-12 bg-foreground text-background rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:scale-110">
+                  <Linkedin className="w-6 h-6" />
+                </div>
+                <span className="text-foreground font-body text-sm font-medium">LinkedIn</span>
               </a>
               <a 
                 href="https://github.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 bg-foreground text-background rounded-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                className="flex items-center gap-3 group"
               >
-                <Github className="w-6 h-6" />
+                <div className="w-12 h-12 bg-foreground text-background rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:scale-110">
+                  <Github className="w-6 h-6" />
+                </div>
+                <span className="text-foreground font-body text-sm font-medium">GitHub</span>
               </a>
               <a 
                 href="https://youtube.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 bg-foreground text-background rounded-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110"
+                className="flex items-center gap-3 group"
               >
-                <Youtube className="w-6 h-6" />
+                <div className="w-12 h-12 bg-foreground text-background rounded-lg flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:scale-110">
+                  <Youtube className="w-6 h-6" />
+                </div>
+                <span className="text-foreground font-body text-sm font-medium">YouTube</span>
               </a>
             </div>
             
-            {/* About - Right */}
-            <div className="max-w-2xl bg-accent/5 border border-border rounded-xl p-6 hover:border-primary/50 transition-all duration-300">
-              <h3 className="text-2xl font-bold font-body mb-4 text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">About</h3>
-              <p className="text-foreground/90 font-body leading-relaxed text-lg">
-                I'm a Swiss–Italian analyst & builder focused on fintech AI. With a curious and delivery-oriented mindset, I'm always down for a new challenge.
-              </p>
+            {/* Profile Photo - Right */}
+            <div className="flex items-center justify-center bg-accent/5 border border-border rounded-xl p-6 hover:border-primary/50 transition-all duration-300">
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30 flex items-center justify-center overflow-hidden">
+                <span className="text-foreground/40 text-sm font-body">Photo</span>
+              </div>
             </div>
           </div>
         )}
