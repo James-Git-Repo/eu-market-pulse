@@ -47,14 +47,11 @@ export const Footer = () => {
               </a>
             </div>
             
-            {/* Profile Photo & About - Right */}
-            <div className="flex flex-col items-center gap-6 bg-accent/5 border border-border rounded-xl p-6 hover:border-primary/50 transition-all duration-300 max-w-2xl">
+            {/* Profile Photo - Right */}
+            <div className="flex items-center justify-center bg-accent/5 border border-border rounded-xl p-6 hover:border-primary/50 transition-all duration-300">
               <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30 flex items-center justify-center overflow-hidden">
                 <span className="text-foreground/40 text-sm font-body">Photo</span>
               </div>
-              <p className="text-foreground/90 font-body leading-relaxed text-center">
-                I'm a Swiss–Italian analyst & builder focused on fintech AI. With a curious and delivery-oriented mindset, I'm always down for a new challenge.
-              </p>
             </div>
           </div>
         )}
