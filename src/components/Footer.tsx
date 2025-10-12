@@ -6,7 +6,7 @@ export const Footer = () => {
   const isHomePage = location.pathname === "/";
 
   return (
-    <footer className="w-full py-6 sm:py-8 mt-12 sm:mt-16">
+    <footer className="w-full py-4 sm:py-6 mt-6 sm:mt-8">
       <div className="container mx-auto px-4">
         {isHomePage && (
           <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-4">
@@ -45,6 +45,15 @@ export const Footer = () => {
                 </div>
                 <span className="text-foreground font-body text-sm font-medium">YouTube</span>
               </a>
+            </div>
+            
+            {/* About Text - Left of Photo */}
+            <div className="flex-1 max-w-md">
+              <h3 className="text-xl font-heading font-semibold text-foreground mb-3">About</h3>
+              <p className="text-foreground/80 font-body text-sm leading-relaxed">
+                Welcome to The (un)Stable Net, where we explore the intersection of technology, 
+                finance, and innovation. Stay informed with our latest insights and analysis.
+              </p>
             </div>
             
             {/* Profile Photo - Right */}
