@@ -5,12 +5,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
+import { useEditor } from "@/contexts/EditorContext";
+import { RichTextEditor } from "@/components/RichTextEditor";
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { isEditorMode } = useEditor();
+  const [pageContent, setPageContent] = useState({
+    title: "Subscribe to The (un)Stable Net",
+    description: "Get actionable briefs across EU markets delivered to your inbox.",
+    cardTitle: "Join our newsletter",
+    cardDescription: "Signals, not noise. We send curated market analysis weekly."
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,20 +54,53 @@ const Subscribe = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
             <Mail className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Subscribe to The (un)Stable Net
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Get actionable briefs across EU markets delivered to your inbox.
-          </p>
+          {isEditorMode ? (
+            <>
+              <Input
+                value={pageContent.title}
+                onChange={(e) => setPageContent({ ...pageContent, title: e.target.value })}
+                className="text-4xl md:text-5xl font-bold mb-4 text-center"
+              />
+              <Input
+                value={pageContent.description}
+                onChange={(e) => setPageContent({ ...pageContent, description: e.target.value })}
+                className="text-xl text-center"
+              />
+            </>
+          ) : (
+            <>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                {pageContent.title}
+              </h1>
+              <p className="text-xl text-muted-foreground">
+                {pageContent.description}
+              </p>
+            </>
+          )}
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Join our newsletter</CardTitle>
-            <CardDescription>
-              Signals, not noise. We send curated market analysis weekly.
-            </CardDescription>
+            {isEditorMode ? (
+              <>
+                <Input
+                  value={pageContent.cardTitle}
+                  onChange={(e) => setPageContent({ ...pageContent, cardTitle: e.target.value })}
+                  className="text-2xl font-semibold mb-2"
+                />
+                <RichTextEditor
+                  content={pageContent.cardDescription}
+                  onChange={(content) => setPageContent({ ...pageContent, cardDescription: content })}
+                />
+              </>
+            ) : (
+              <>
+                <CardTitle>{pageContent.cardTitle}</CardTitle>
+                <CardDescription>
+                  <div dangerouslySetInnerHTML={{ __html: pageContent.cardDescription }} />
+                </CardDescription>
+              </>
+            )}
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
