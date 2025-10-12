@@ -12,6 +12,7 @@ import Articles from "./pages/Articles";
 import Archive from "./pages/Archive";
 import Post from "./pages/Post";
 import Subscribe from "./pages/Subscribe";
+import NewsletterEditor from "./pages/NewsletterEditor";
 import Contribute from "./pages/Contribute";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
@@ -37,7 +38,7 @@ const App = () => (
               <Route path="/articles" element={<Articles />} />
               <Route path="/archive" element={<Archive />} />
               <Route path="/post/:slug" element={<Post />} />
-              <Route path="/subscribe" element={<Subscribe />} />
+              <Route path="/subscribe" element={<NewsletterEditor />} />
               <Route path="/contribute" element={<Contribute />} />
               <Route path="/about" element={<About />} />
               <Route path="/resources" element={<Resources />} />

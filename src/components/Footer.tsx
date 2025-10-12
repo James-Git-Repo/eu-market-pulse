@@ -88,7 +88,7 @@ export const Footer = () => {
     <footer className="w-full py-4 sm:py-6 mt-6 sm:mt-8">
       <div className="container mx-auto px-4">
         {isHomePage && (
-          <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-4">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-4 mb-4">
             {/* Social Links - Left */}
             <div className="flex flex-col gap-3">
               <a 
@@ -126,39 +126,42 @@ export const Footer = () => {
               </a>
             </div>
             
-            {/* Profile Photo - Center Left */}
-            <div className="relative flex items-center justify-center">
-              <div 
-                className="bg-accent/5 border border-border rounded-xl p-6 hover:border-primary/50 transition-all duration-300 cursor-pointer"
-                onClick={() => isEditorMode && setShowEditDialog(true)}
-              >
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30 flex items-center justify-center overflow-hidden">
-                  {footerPhoto.imageUrl ? (
-                    <img src={footerPhoto.imageUrl} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-foreground/40 text-sm font-body">Photo</span>
-                  )}
-                </div>
-              </div>
-              {isEditorMode && (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="absolute -top-2 -right-2"
-                  onClick={() => setShowEditDialog(true)}
+            {/* Photo and About Section - Grouped Together */}
+            <div className="flex items-start gap-6 flex-1">
+              {/* Profile Photo */}
+              <div className="relative flex-shrink-0">
+                <div 
+                  className="bg-accent/5 border border-border rounded-xl p-4 hover:border-primary/50 transition-all duration-300 cursor-pointer"
+                  onClick={() => isEditorMode && setShowEditDialog(true)}
                 >
-                  <Upload className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
-            
-            {/* About Text - Right of Photo */}
-            <div className="flex-1 max-w-md">
-              <h3 className="text-xl font-heading font-semibold text-foreground mb-3">About</h3>
-              <p className="text-foreground/80 font-body text-sm leading-relaxed">
-                Welcome to The (un)Stable Net, where we explore the intersection of technology, 
-                finance, and innovation. Stay informed with our latest insights and analysis.
-              </p>
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/30 flex items-center justify-center overflow-hidden">
+                    {footerPhoto.imageUrl ? (
+                      <img src={footerPhoto.imageUrl} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-foreground/40 text-sm font-body">Photo</span>
+                    )}
+                  </div>
+                </div>
+                {isEditorMode && (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="absolute -top-2 -right-2"
+                    onClick={() => setShowEditDialog(true)}
+                  >
+                    <Upload className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+              
+              {/* About Text - Right of Photo */}
+              <div className="flex-1">
+                <h3 className="text-xl font-heading font-semibold text-foreground mb-3">About</h3>
+                <p className="text-foreground/80 font-body text-sm leading-relaxed">
+                  Welcome to The (un)Stable Net, where we explore the intersection of technology, 
+                  finance, and innovation. Stay informed with our latest insights and analysis.
+                </p>
+              </div>
             </div>
           </div>
         )}
