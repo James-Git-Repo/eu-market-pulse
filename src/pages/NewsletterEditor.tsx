@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
 import { useEditor } from "@/contexts/EditorContext";
 import { RichTextEditor } from "@/components/RichTextEditor";
+import { SafeHTML } from "@/components/SafeHTML";
 import { supabase } from "@/integrations/supabase/client";
 
 const NewsletterEditor = () => {
@@ -145,7 +146,7 @@ const NewsletterEditor = () => {
               <>
                 <CardTitle>{pageContent.cardTitle}</CardTitle>
                 <CardDescription>
-                  <div dangerouslySetInnerHTML={{ __html: pageContent.cardDescription }} />
+                  <SafeHTML html={pageContent.cardDescription} />
                 </CardDescription>
               </>
             )}

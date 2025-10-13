@@ -16,14 +16,53 @@ const EditorContext = createContext<EditorContextType | undefined>(undefined);
 export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [hasEditorRole, setHasEditorRole] = useState(false);
+
+  // Check if user has editor or admin role
+  const checkEditorRole = async (userId: string) => {
+    try {
+      const { data, error } = await supabase.rpc('has_role', {
+        _user_id: userId,
+        _role: 'editor'
+      });
+      
+      if (error) {
+        console.error('Error checking editor role:', error);
+        return false;
+      }
+      
+      // Also check for admin role
+      const { data: adminData, error: adminError } = await supabase.rpc('has_role', {
+        _user_id: userId,
+        _role: 'admin'
+      });
+      
+      if (adminError) {
+        console.error('Error checking admin role:', adminError);
+        return false;
+      }
+      
+      return data === true || adminData === true;
+    } catch (err) {
+      console.error('Error in checkEditorRole:', err);
+      return false;
+    }
+  };
 
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
-        if (session) {
+        
+        // Check role when session changes
+        if (session?.user) {
+          setTimeout(() => {
+            checkEditorRole(session.user.id).then(setHasEditorRole);
+          }, 0);
           setShowLoginDialog(false);
+        } else {
+          setHasEditorRole(false);
         }
       }
     );
@@ -31,6 +70,9 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session?.user) {
+        checkEditorRole(session.user.id).then(setHasEditorRole);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -72,7 +114,7 @@ export const EditorProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <EditorContext.Provider
       value={{
-        isEditorMode: !!session,
+        isEditorMode: !!session && hasEditorRole,
         session,
         showLoginDialog,
         setShowLoginDialog,

@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
 import { useEditor } from "@/contexts/EditorContext";
 import { RichTextEditor } from "@/components/RichTextEditor";
+import { SafeHTML } from "@/components/SafeHTML";
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
@@ -97,7 +98,7 @@ const Subscribe = () => {
               <>
                 <CardTitle>{pageContent.cardTitle}</CardTitle>
                 <CardDescription>
-                  <div dangerouslySetInnerHTML={{ __html: pageContent.cardDescription }} />
+                  <SafeHTML html={pageContent.cardDescription} />
                 </CardDescription>
               </>
             )}
