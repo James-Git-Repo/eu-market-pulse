@@ -159,12 +159,12 @@ const Post = () => {
 
         <div 
           className="prose prose-base sm:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-10 md:mb-12 
-                     prose-p:text-justify prose-p:mb-6 prose-p:leading-relaxed prose-p:italic
-                     prose-headings:mt-8 prose-headings:mb-4 prose-headings:font-bold prose-headings:not-italic
+                     prose-p:text-justify prose-p:mb-8 prose-p:leading-[2] prose-p:italic
+                     prose-headings:mt-10 prose-headings:mb-6 prose-headings:font-bold prose-headings:not-italic prose-headings:leading-tight
                      prose-strong:font-bold prose-strong:not-italic
-                     prose-ul:my-6 prose-ul:text-justify 
-                     prose-ol:my-6 prose-ol:text-justify 
-                     prose-li:my-2 prose-li:leading-relaxed"
+                     prose-ul:my-8 prose-ul:text-justify 
+                     prose-ol:my-8 prose-ol:text-justify 
+                     prose-li:my-3 prose-li:leading-[2]"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
