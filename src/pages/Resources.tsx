@@ -168,9 +168,12 @@ export default function Resources() {
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8 font-body">Podcasts</h2>
           <div className="space-y-4">
             {podcasts.map((resource) => (
-              <div
+              <a
                 key={resource.id}
-                className="bg-card border rounded-lg p-6 hover:shadow-lg transition-shadow relative group"
+                href={resource.url || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`block bg-card border rounded-lg p-6 hover:shadow-lg transition-shadow relative group ${!resource.url ? 'pointer-events-none' : ''}`}
               >
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-primary/10 rounded-full text-primary flex-shrink-0">
@@ -188,21 +191,31 @@ export default function Resources() {
                     </div>
                   )}
                   {isEditorMode && (
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button size="sm" variant="outline" onClick={() => openEditDialog(resource)}>
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openEditDialog(resource);
+                        }}
+                      >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
                         size="sm"
                         variant="destructive"
-                        onClick={() => handleDelete(resource.id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDelete(resource.id);
+                        }}
                       >
                         <Trash className="w-4 h-4" />
                       </Button>
                     </div>
                   )}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -214,9 +227,12 @@ export default function Resources() {
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8 font-body">Articles</h2>
           <div className="space-y-4">
             {articles.map((resource) => (
-              <div
+              <a
                 key={resource.id}
-                className="bg-card border rounded-lg p-6 hover:shadow-lg transition-shadow relative group"
+                href={resource.url || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`block bg-card border rounded-lg p-6 hover:shadow-lg transition-shadow relative group ${!resource.url ? 'pointer-events-none' : ''}`}
               >
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-primary/10 rounded-full text-primary flex-shrink-0">
@@ -234,21 +250,31 @@ export default function Resources() {
                     </div>
                   )}
                   {isEditorMode && (
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button size="sm" variant="outline" onClick={() => openEditDialog(resource)}>
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openEditDialog(resource);
+                        }}
+                      >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
                         size="sm"
                         variant="destructive"
-                        onClick={() => handleDelete(resource.id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDelete(resource.id);
+                        }}
                       >
                         <Trash className="w-4 h-4" />
                       </Button>
                     </div>
                   )}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -260,9 +286,12 @@ export default function Resources() {
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8 font-body">Tools & Links</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {tools.map((resource) => (
-              <div
+              <a
                 key={resource.id}
-                className="bg-card border rounded-lg p-6 hover:shadow-lg transition-shadow relative group"
+                href={resource.url || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`block bg-card border rounded-lg p-6 hover:shadow-lg transition-shadow relative group ${!resource.url ? 'pointer-events-none' : ''}`}
               >
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-primary/10 rounded-full text-primary flex-shrink-0">
@@ -272,21 +301,31 @@ export default function Resources() {
                     <h3 className="text-lg font-semibold font-body">{resource.title}</h3>
                   </div>
                   {isEditorMode && (
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button size="sm" variant="outline" onClick={() => openEditDialog(resource)}>
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openEditDialog(resource);
+                        }}
+                      >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
                         size="sm"
                         variant="destructive"
-                        onClick={() => handleDelete(resource.id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDelete(resource.id);
+                        }}
                       >
                         <Trash className="w-4 h-4" />
                       </Button>
                     </div>
                   )}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
