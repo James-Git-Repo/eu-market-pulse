@@ -1,0 +1,17 @@
+const MillionSlots = () => {
+  return (
+    <main className="container mx-auto px-4 py-16">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-6">The Million Slots AI Billboard</h1>
+        <p className="text-xl text-muted-foreground mb-8">
+          A 1,000,000-tile digital mosaic of AI micro-videos
+        </p>
+        <div className="aspect-video bg-gradient-to-br from-primary/30 to-secondary/30 rounded-lg flex items-center justify-center">
+          <p className="text-2xl text-muted-foreground">Coming Soon</p>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default MillionSlots;

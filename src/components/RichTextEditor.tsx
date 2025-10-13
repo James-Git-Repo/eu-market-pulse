@@ -1,8 +1,9 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
+import Underline from '@tiptap/extension-underline';
 import { Button } from '@/components/ui/button';
-import { Bold, Italic, List, ListOrdered, AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
+import { Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
 
 interface RichTextEditorProps {
   content: string;
@@ -13,6 +14,7 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Underline,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
@@ -50,6 +52,14 @@ export const RichTextEditor = ({ content, onChange }: RichTextEditorProps) => {
           onClick={() => editor.chain().focus().toggleItalic().run()}
         >
           <Italic className="w-4 h-4" />
+        </Button>
+        <Button
+          type="button"
+          variant={editor.isActive('underline') ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+        >
+          <UnderlineIcon className="w-4 h-4" />
         </Button>
         <div className="w-px h-8 bg-border mx-1" />
         <Button

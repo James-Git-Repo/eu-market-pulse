@@ -241,8 +241,8 @@ const Index = () => {
         <h2 className="text-4xl font-bold font-body text-foreground mb-12">Projects</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Newsletter Project Card - Links to Articles */}
-          <Link to="/articles" className="block group">
+          {/* Card A - Newsletter Project - Links to Newsletter */}
+          <Link to="/newsletter" className="block group">
             <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full hover:shadow-xl transition-all duration-300 border border-border hover:scale-105 transform relative">
               {isEditorMode && (
                 <Button
@@ -290,8 +290,9 @@ const Index = () => {
             </div>
           </Link>
 
-          {/* Million Slots Card */}
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform relative">
+          {/* Card B - Million Slots Card - Links to Million Slots */}
+          <Link to="/million-slots" className="block group">
+            <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border hover:scale-105 hover:shadow-xl transition-all duration-300 transform relative">
             {isEditorMode && (
               <Button
                 size="sm"
@@ -331,10 +332,11 @@ const Index = () => {
                 </div>
               </div>
             )}
-          </div>
+            </div>
+          </Link>
 
-          {/* Coming Soon Card */}
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg p-6 h-full border border-border group hover:scale-105 hover:shadow-xl transition-all duration-300 transform relative">
+          {/* Card C - Coming Soon - Not Clickable */}
+          <div className="bg-background/60 backdrop-blur-sm rounded-lg p-6 h-full border border-border opacity-50 saturate-50 pointer-events-none relative" aria-disabled="true">
             {isEditorMode && (
               <Button
                 size="sm"
@@ -347,6 +349,9 @@ const Index = () => {
                 <Pencil className="w-4 h-4" />
               </Button>
             )}
+            <div className="absolute top-2 right-2 bg-muted text-muted-foreground px-3 py-1 rounded-full text-xs font-semibold">
+              Coming Soon
+            </div>
             <h3 className="text-2xl font-bold font-body mb-3">Coming soon</h3>
             <p className="text-muted-foreground font-body mb-6">
               New projects and deep dives are landing shortly.
