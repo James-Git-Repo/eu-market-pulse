@@ -72,7 +72,10 @@ const NewsletterNew = () => {
           slug,
         });
 
-      if (insertError) throw insertError;
+      if (insertError) {
+        console.error('Insert error:', insertError);
+        throw insertError;
+      }
 
       toast({
         title: "Article created",
@@ -80,11 +83,11 @@ const NewsletterNew = () => {
       });
 
       navigate('/newsletter');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating article:', error);
       toast({
         title: "Error",
-        description: "Failed to create article. Please try again.",
+        description: error.message || "Failed to create article. Please try again.",
         variant: "destructive",
       });
     } finally {
