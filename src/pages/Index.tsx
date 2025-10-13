@@ -349,9 +349,6 @@ const Index = () => {
                 <Pencil className="w-4 h-4" />
               </Button>
             )}
-            <div className="absolute top-2 right-2 bg-muted text-muted-foreground px-3 py-1 rounded-full text-xs font-semibold">
-              Coming Soon
-            </div>
             <h3 className="text-2xl font-bold font-body mb-3">Coming soon</h3>
             <p className="text-muted-foreground font-body mb-6">
               New projects and deep dives are landing shortly.
