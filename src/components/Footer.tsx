@@ -24,7 +24,7 @@ export const Footer = () => {
         .from("Covers")
         .select("*")
         .eq("category", "footer-photo")
-        .single();
+        .maybeSingle();
       
       if (data) {
         setFooterPhoto({ id: data.id, imageUrl: data.image || "" });
@@ -55,20 +55,35 @@ export const Footer = () => {
         .from('article-images')
         .getPublicUrl(filePath);
 
-      const { data, error: upsertError } = await supabase
-        .from('Covers')
-        .upsert({
-          id: footerPhoto.id,
-          category: 'footer-photo',
-          name: 'Footer Photo',
-          image: publicUrl
-        })
-        .select()
-        .single();
+      // Insert or update the footer photo
+      if (footerPhoto.id) {
+        // Update existing record
+        const { data, error: updateError } = await supabase
+          .from('Covers')
+          .update({
+            image: publicUrl
+          })
+          .eq('id', footerPhoto.id)
+          .select()
+          .single();
 
-      if (upsertError) throw upsertError;
+        if (updateError) throw updateError;
+        setFooterPhoto({ id: data.id, imageUrl: publicUrl });
+      } else {
+        // Insert new record
+        const { data, error: insertError } = await supabase
+          .from('Covers')
+          .insert({
+            category: 'footer-photo',
+            name: 'Footer Photo',
+            image: publicUrl
+          })
+          .select()
+          .single();
 
-      setFooterPhoto({ id: data.id, imageUrl: publicUrl });
+        if (insertError) throw insertError;
+        setFooterPhoto({ id: data.id, imageUrl: publicUrl });
+      }
       toast({
         title: "Success",
         description: "Footer photo updated successfully",
