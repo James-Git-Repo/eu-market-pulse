@@ -157,22 +157,10 @@ const Post = () => {
           </div>
         </div>
 
-        <div className="prose prose-base sm:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-10 md:mb-12">
-          {post.content.split('\n').map((paragraph: string, i: number) => {
-            if (paragraph.startsWith('# ')) {
-              return <h1 key={i} className="text-2xl sm:text-3xl font-body font-bold mt-6 sm:mt-8 mb-3 sm:mb-4">{paragraph.slice(2)}</h1>;
-            } else if (paragraph.startsWith('## ')) {
-              return <h2 key={i} className="text-xl sm:text-2xl font-body font-bold mt-5 sm:mt-6 mb-2 sm:mb-3">{paragraph.slice(3)}</h2>;
-            } else if (paragraph.startsWith('### ')) {
-              return <h3 key={i} className="text-lg sm:text-xl font-body font-bold mt-4 mb-2">{paragraph.slice(4)}</h3>;
-            } else if (paragraph.startsWith('- ')) {
-              return <li key={i} className="ml-6 font-body">{paragraph.slice(2)}</li>;
-            } else if (paragraph.trim()) {
-              return <p key={i} className="mb-4 font-body leading-relaxed">{paragraph}</p>;
-            }
-            return null;
-          })}
-        </div>
+        <div 
+          className="prose prose-base sm:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-10 md:mb-12"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
 
         <div className="border-t border-border pt-6 sm:pt-8 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
