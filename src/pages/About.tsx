@@ -459,7 +459,7 @@ export default function About() {
                     <span className="text-sm font-body text-foreground">GitHub</span>
                   </a>
                   <a
-                    href="#"
+                    href="https://x.com/JacopoBerton"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center gap-3 p-6 bg-background/60 backdrop-blur-sm rounded-xl hover:bg-background/80 transition-all hover:scale-105"
