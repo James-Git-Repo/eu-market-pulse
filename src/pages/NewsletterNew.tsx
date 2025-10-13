@@ -55,8 +55,9 @@ const NewsletterNew = () => {
         imageUrl = publicUrl;
       }
 
-      // Create slug from title
-      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      // Create unique slug from title with timestamp
+      const baseSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const slug = `${baseSlug}-${Date.now()}`;
 
       // Insert article
       const { error: insertError } = await supabase
