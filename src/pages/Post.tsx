@@ -158,7 +158,7 @@ const Post = () => {
         </div>
 
         <div 
-          className="prose prose-base sm:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-10 md:mb-12"
+          className="prose prose-base sm:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-10 md:mb-12 prose-p:mb-4 prose-headings:mt-6 prose-headings:mb-4 prose-ul:my-4 prose-ol:my-4 prose-li:my-1"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
