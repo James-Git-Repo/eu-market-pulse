@@ -41,23 +41,43 @@ export const Footer = () => {
     if (!file) return;
 
     try {
+      console.log('Starting upload for file:', file.name, 'Size:', file.size);
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error('File size must be less than 5MB');
+      }
+
       const fileExt = file.name.split('.').pop();
       const fileName = `footer-photo-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const filePath = `footer-photos/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
+      console.log('Uploading to path:', filePath);
+
+      const { error: uploadError, data: uploadData } = await supabase.storage
         .from('article-images')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('Upload successful, getting public URL');
 
       const { data: { publicUrl } } = supabase.storage
         .from('article-images')
         .getPublicUrl(filePath);
 
+      console.log('Public URL:', publicUrl);
+
       // Insert or update the footer photo
       if (footerPhoto.id) {
         // Update existing record
+        console.log('Updating existing record:', footerPhoto.id);
         const { data, error: updateError } = await supabase
           .from('Covers')
           .update({
@@ -67,10 +87,14 @@ export const Footer = () => {
           .select()
           .single();
 
-        if (updateError) throw updateError;
+        if (updateError) {
+          console.error('Update error:', updateError);
+          throw updateError;
+        }
         setFooterPhoto({ id: data.id, imageUrl: publicUrl });
       } else {
         // Insert new record
+        console.log('Inserting new record');
         const { data, error: insertError } = await supabase
           .from('Covers')
           .insert({
@@ -81,7 +105,10 @@ export const Footer = () => {
           .select()
           .single();
 
-        if (insertError) throw insertError;
+        if (insertError) {
+          console.error('Insert error:', insertError);
+          throw insertError;
+        }
         setFooterPhoto({ id: data.id, imageUrl: publicUrl });
       }
       toast({
@@ -91,9 +118,10 @@ export const Footer = () => {
       setShowEditDialog(false);
     } catch (error) {
       console.error('Error uploading image:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to upload image';
       toast({
         title: "Error",
-        description: "Failed to upload image",
+        description: errorMessage,
         variant: "destructive",
       });
     }
