@@ -3,7 +3,6 @@ import { Hero } from "@/components/Hero";
 import { FilterBar } from "@/components/FilterBar";
 import { PostCard } from "@/components/PostCard";
 import { MobileSubscribe } from "@/components/MobileSubscribe";
-import { TAGS } from "@/data/mockData";
 import { supabase } from "@/integrations/supabase/client";
 import { useEditor } from "@/contexts/EditorContext";
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("all");
   const [posts, setPosts] = useState<any[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingArticle, setEditingArticle] = useState<any>(null);
@@ -41,6 +41,9 @@ const Home = () => {
       console.error('Error fetching posts:', error);
     } else {
       setPosts(data || []);
+      // Extract unique tags from articles
+      const uniqueTags = Array.from(new Set(data?.map(article => article.tag).filter(Boolean))) as string[];
+      setTags(uniqueTags);
     }
     setLoading(false);
   };
@@ -73,7 +76,7 @@ const Home = () => {
             onSearchChange={setSearchQuery}
             selectedTag={selectedTag}
             onTagChange={setSelectedTag}
-            tags={TAGS}
+            tags={tags}
           />
           
           {isEditorMode && (
