@@ -140,15 +140,23 @@ export const RichTextEditor = ({ content, onChange, placeholder = 'Start writing
         levels: [1, 2, 3],
       }),
       Paragraph,
-      ListItem,
-      BulletList.configure({
+      ListItem.configure({
         HTMLAttributes: {
-          class: 'list-disc pl-6',
+          class: 'ml-0',
+        },
+      }),
+      BulletList.configure({
+        keepMarks: true,
+        keepAttributes: false,
+        HTMLAttributes: {
+          class: 'list-disc pl-6 my-2',
         },
       }),
       OrderedList.configure({
+        keepMarks: true,
+        keepAttributes: false,
         HTMLAttributes: {
-          class: 'list-decimal pl-6',
+          class: 'list-decimal pl-6 my-2',
         },
       }),
       Blockquote,
