@@ -39,49 +39,86 @@
   pointer-events: none;
 }
 
-/* List Styles */
-.ProseMirror ul,
-.prose ul {
+/* List Styles - Force override Tailwind reset */
+.ProseMirror ul {
   list-style-type: disc !important;
   list-style-position: outside !important;
-  padding-left: 1.5rem !important;
+  padding-left: 2.5rem !important;
+  margin: 1rem 0 !important;
   margin-left: 0 !important;
 }
 
-.ProseMirror ol,
-.prose ol {
+.ProseMirror ol {
   list-style-type: decimal !important;
   list-style-position: outside !important;
-  padding-left: 1.5rem !important;
+  padding-left: 2.5rem !important;
+  margin: 1rem 0 !important;
   margin-left: 0 !important;
 }
 
-.ProseMirror ul ul,
-.prose ul ul {
+.ProseMirror li {
+  display: list-item !important;
+  list-style-position: outside !important;
+  margin-left: 0 !important;
+  padding-left: 0.5rem !important;
+  margin-bottom: 0.25rem;
+}
+
+.ProseMirror ul > li {
+  list-style-type: disc !important;
+}
+
+.ProseMirror ol > li {
+  list-style-type: decimal !important;
+}
+
+.ProseMirror ul ul {
   list-style-type: circle !important;
 }
 
-.ProseMirror ul ul ul,
-.prose ul ul ul {
+.ProseMirror ul ul ul {
   list-style-type: square !important;
 }
 
-.ProseMirror li,
-.prose li {
-  display: list-item !important;
+/* Prose class compatibility */
+.prose ul {
+  list-style-type: disc !important;
   list-style-position: outside !important;
-  margin-bottom: 0.25rem;
+  padding-left: 2.5rem !important;
+  margin: 1rem 0 !important;
   margin-left: 0 !important;
 }
 
-.ProseMirror ul li,
+.prose ol {
+  list-style-type: decimal !important;
+  list-style-position: outside !important;
+  padding-left: 2.5rem !important;
+  margin: 1rem 0 !important;
+  margin-left: 0 !important;
+}
+
+.prose li {
+  display: list-item !important;
+  list-style-position: outside !important;
+  margin-left: 0 !important;
+  padding-left: 0.5rem !important;
+  margin-bottom: 0.25rem;
+}
+
 .prose ul li {
   list-style-type: disc !important;
 }
 
-.ProseMirror ol li,
 .prose ol li {
   list-style-type: decimal !important;
+}
+
+.prose ul ul {
+  list-style-type: circle !important;
+}
+
+.prose ul ul ul {
+  list-style-type: square !important;
 }
 
 /* Blockquote Styles */
