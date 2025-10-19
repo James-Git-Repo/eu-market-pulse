@@ -141,8 +141,16 @@ export const RichTextEditor = ({ content, onChange, placeholder = 'Start writing
       }),
       Paragraph,
       ListItem,
-      BulletList,
-      OrderedList,
+      BulletList.configure({
+        HTMLAttributes: {
+          class: 'list-disc pl-6',
+        },
+      }),
+      OrderedList.configure({
+        HTMLAttributes: {
+          class: 'list-decimal pl-6',
+        },
+      }),
       Blockquote,
       CodeBlock,
       History,
@@ -163,7 +171,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = 'Start writing
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose-base lg:prose-lg max-w-none focus:outline-none min-h-[400px] p-6',
+        class: 'prose prose-sm sm:prose-base lg:prose-lg max-w-none focus:outline-none min-h-[400px] p-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:ml-0',
       },
       handlePaste: (view, event) => {
         // Let TipTap handle paste naturally but sanitize
