@@ -149,14 +149,14 @@ export const RichTextEditor = ({ content, onChange, placeholder = 'Start writing
         keepMarks: true,
         keepAttributes: false,
         HTMLAttributes: {
-          class: 'list-disc pl-6 my-2',
+          class: '',
         },
       }),
       OrderedList.configure({
         keepMarks: true,
         keepAttributes: false,
         HTMLAttributes: {
-          class: 'list-decimal pl-6 my-2',
+          class: '',
         },
       }),
       Blockquote,
