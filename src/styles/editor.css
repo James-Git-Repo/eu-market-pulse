@@ -43,6 +43,7 @@
 .ProseMirror ul,
 .prose ul {
   list-style-type: disc !important;
+  list-style-position: outside !important;
   padding-left: 1.5rem !important;
   margin-left: 0 !important;
 }
@@ -50,6 +51,7 @@
 .ProseMirror ol,
 .prose ol {
   list-style-type: decimal !important;
+  list-style-position: outside !important;
   padding-left: 1.5rem !important;
   margin-left: 0 !important;
 }
@@ -67,6 +69,7 @@
 .ProseMirror li,
 .prose li {
   display: list-item !important;
+  list-style-position: outside !important;
   margin-bottom: 0.25rem;
   margin-left: 0 !important;
 }

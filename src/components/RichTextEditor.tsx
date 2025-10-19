@@ -179,7 +179,7 @@ export const RichTextEditor = ({ content, onChange, placeholder = 'Start writing
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose-base lg:prose-lg max-w-none focus:outline-none min-h-[400px] p-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:ml-0',
+        class: 'max-w-none focus:outline-none min-h-[400px] p-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:my-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:my-4 [&_li]:ml-0 [&_li]:list-item',
       },
       handlePaste: (view, event) => {
         // Let TipTap handle paste naturally but sanitize
