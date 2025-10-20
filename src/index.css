@@ -97,12 +97,6 @@ All colors MUST be HSL.
     }
   }
 
-  /* Override Tailwind Preflight for lists to restore browser defaults */
-  ul, ol {
-    list-style: revert;
-    margin: revert;
-    padding: revert;
-  }
 }
 
 @layer utilities {
