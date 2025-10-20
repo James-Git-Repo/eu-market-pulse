@@ -20,7 +20,6 @@ import Contribute from "./pages/Contribute";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
-import MigrateCovers from "./pages/MigrateCovers";
 import About from "./pages/About";
 import Resources from "./pages/Resources";
 
@@ -51,7 +50,6 @@ const App = () => (
               <Route path="/resources" element={<Resources />} />
               <Route path="/legal/terms" element={<Terms />} />
               <Route path="/legal/privacy" element={<Privacy />} />
-              <Route path="/migrate-covers" element={<MigrateCovers />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
