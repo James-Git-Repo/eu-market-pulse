@@ -163,7 +163,9 @@ const Post = () => {
           className="prose prose-base sm:prose-lg dark:prose-invert max-w-none mb-8 sm:mb-10 md:mb-12 
                      [&_p]:text-justify [&_p]:leading-normal
                      [&_p:empty]:min-h-[1rem]
-                     [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold"
+                     [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold
+                     [&_ul]:!list-disc [&_ul]:!pl-10 [&_ol]:!list-decimal [&_ol]:!pl-10
+                     [&_li]:!list-item [&_li]:!ml-0"
         />
 
         <div className="border-t border-border pt-6 sm:pt-8 mb-6 sm:mb-8">

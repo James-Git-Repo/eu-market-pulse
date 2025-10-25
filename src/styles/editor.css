@@ -56,7 +56,10 @@
 .prose ul,
 ul.ProseMirror,
 div[class*="ProseMirror"] ul,
-div.prose ul {
+div.prose ul,
+div[class*="prose"] ul,
+article ul,
+[class*="prose"] ul {
   display: block !important;
   list-style-type: disc !important;
   list-style-position: outside !important;
@@ -69,7 +72,10 @@ div.prose ul {
 .prose ol,
 ol.ProseMirror,
 div[class*="ProseMirror"] ol,
-div.prose ol {
+div.prose ol,
+div[class*="prose"] ol,
+article ol,
+[class*="prose"] ol {
   display: block !important;
   list-style-type: decimal !important;
   list-style-position: outside !important;
@@ -82,7 +88,10 @@ div.prose ol {
 .prose li,
 li.ProseMirror,
 div[class*="ProseMirror"] li,
-div.prose li {
+div.prose li,
+div[class*="prose"] li,
+article li,
+[class*="prose"] li {
   display: list-item !important;
   list-style-position: outside !important;
   margin-left: 0 !important;
@@ -92,25 +101,37 @@ div.prose li {
 
 .ProseMirror ul > li,
 .prose ul > li,
-div.prose ul > li {
+div.prose ul > li,
+div[class*="prose"] ul > li,
+article ul > li,
+[class*="prose"] ul > li {
   list-style-type: disc !important;
 }
 
 .ProseMirror ol > li,
 .prose ol > li,
-div.prose ol > li {
+div.prose ol > li,
+div[class*="prose"] ol > li,
+article ol > li,
+[class*="prose"] ol > li {
   list-style-type: decimal !important;
 }
 
 .ProseMirror ul ul,
 .prose ul ul,
-div.prose ul ul {
+div.prose ul ul,
+div[class*="prose"] ul ul,
+article ul ul,
+[class*="prose"] ul ul {
   list-style-type: circle !important;
 }
 
 .ProseMirror ul ul ul,
 .prose ul ul ul,
-div.prose ul ul ul {
+div.prose ul ul ul,
+div[class*="prose"] ul ul ul,
+article ul ul ul,
+[class*="prose"] ul ul ul {
   list-style-type: square !important;
 }
 
