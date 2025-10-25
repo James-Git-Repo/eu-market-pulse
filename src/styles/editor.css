@@ -18,12 +18,24 @@
   margin-block: 0 !important;
 }
 
+.para-gap-xs {
+  margin-block: 0.25rem !important;
+}
+
 .para-gap-sm {
   margin-block: 0.5rem !important;
 }
 
 .para-gap-md {
+  margin-block: 0.75rem !important;
+}
+
+.para-gap-lg {
   margin-block: 1rem !important;
+}
+
+.para-gap-xl {
+  margin-block: 1.5rem !important;
 }
 
 /* Editor Specific Styles */
@@ -164,13 +176,14 @@ div.prose ul ul ul {
   line-height: 1.4;
 }
 
-/* Paragraph Styles - Default margin ONLY when no spacing class */
-.ProseMirror p:not([data-spacing]),
-.prose p:not([data-spacing]) {
-  margin-bottom: 1rem;
+/* Paragraph Styles - NO default margin, spacing ONLY when explicitly set */
+.ProseMirror p,
+.prose p {
+  margin-block: 0;
   line-height: 1.6;
 }
 
+/* Spacing only applies when data-spacing attribute is present */
 .ProseMirror p[data-spacing],
 .prose p[data-spacing] {
   line-height: 1.6;

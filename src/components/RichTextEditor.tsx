@@ -399,13 +399,22 @@ export const RichTextEditor = ({ content, onChange, placeholder = 'Start writing
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => (editor.chain().focus() as any).setParagraphSpacing('none').run()}>
-                None
+                None (0px)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => (editor.chain().focus() as any).setParagraphSpacing('xs').run()}>
+                Extra Small (4px)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => (editor.chain().focus() as any).setParagraphSpacing('sm').run()}>
-                Small
+                Small (8px)
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => (editor.chain().focus() as any).setParagraphSpacing('md').run()}>
-                Medium
+                Medium (12px)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => (editor.chain().focus() as any).setParagraphSpacing('lg').run()}>
+                Large (16px)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => (editor.chain().focus() as any).setParagraphSpacing('xl').run()}>
+                Extra Large (24px)
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
