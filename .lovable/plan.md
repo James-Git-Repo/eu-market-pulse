@@ -1,19 +1,28 @@
-## Make Article Images Fit the Text Consistently
+## Accesso editor da mobile
 
-Currently inline images inserted into articles render at their inline `style="max-width:100%"`, but since older uploads use different inline styles and some images have explicit `width`/`height` attributes, they appear in varying sizes (some smaller, some larger), breaking the visual rhythm of the article.
+### Obiettivo
+Permettere agli editor di aprire il pannello di autenticazione/creazione articoli da smartphone, dato che la shortcut da tastiera `Ctrl+Shift+E` non è disponibile su mobile.
 
-### What will change
+### Soluzione
+Aggiungere un trigger discreto nell'interfaccia esistente:
+- Un'icona Editor nell'header, accanto al toggle dark mode, visibile su tutti i viewport.
+- Una voce corrispondente nel menu mobile (hamburger).
+- Al click:
+  - se l'utente non ha una sessione editor: apre il dialog `EditorLoginDialog` già presente in `App.tsx`.
+  - se l'utente ha già il ruolo editor: naviga direttamente a `/newsletter/new`.
 
-Force every image inside the article body (`.prose`) to render at the same width as the surrounding text, centered, with consistent spacing and rounded corners — regardless of the inline styles, width, or height attributes set when the image was originally uploaded.
+### File coinvolti
+- `src/components/Navbar.tsx` — aggiungere il trigger e la voce di menu mobile.
+- `src/contexts/EditorContext.tsx` — nessuna modifica necessaria, si riusa `setShowLoginDialog` dal context.
 
-| File | Change |
-|------|--------|
-| `src/styles/editor.css` | Add a `.prose img` rule that forces `display: block`, `width: 100%`, `height: auto`, `margin: 1.5rem auto`, `border-radius: 8px`, and `object-fit: contain`. Use `!important` to override any legacy inline `width`, `height`, and `style` attributes from previously uploaded images. Also style `.prose figure` (block, centered, no margin override) and `.prose figcaption` (centered, muted, small text) for captioned images |
-| `src/components/SafeHTML.tsx` | No structural change needed — the CSS above will normalize all existing and future images automatically |
+### Dettagli tecnici
+- Usare `useEditor` per leggere `isEditorMode` e aprire il dialog con `setShowLoginDialog`.
+- Usare `useNavigate` da `react-router-dom` per reindirizzare a `/newsletter/new` quando già autenticato.
+- Icona: `Pencil` o `PencilLine` da `lucide-react`, stile ghost/trasparente come il toggle dark mode.
+- Aggiungere `aria-label="Editor"` per accessibilità.
+- Inserire il trigger in fonda al gruppo azioni dell'header e in fonda al menu mobile, in modo che sia discreto e non disturbare la navigazione principale.
 
-### Result
-
-- Every inline image in every article (old and new) renders at the full text-column width
-- Images are vertically spaced consistently (1.5rem above and below)
-- Captions (if present) are centered and styled as muted small text
-- The hero image at the top of the article (rendered separately in `Post.tsx`) is unaffected
+### Verifica
+- Testare il click sul nuovo pulsante in viewport mobile (432x688) e desktop.
+- Verificare che il dialog di login appaia per utenti non autenticati.
+- Verificare che, dopo l'autenticazione con ruolo editor, la navigazione porti a `/newsletter/new`.
