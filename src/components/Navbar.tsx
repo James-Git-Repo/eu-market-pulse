@@ -245,6 +245,16 @@ export const Navbar = () => {
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
             </button>
+            <button
+              onClick={() => {
+                handleEditorClick();
+                setMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-2 p-3 rounded-lg hover:bg-muted transition-colors"
+            >
+              <Pencil className="w-5 h-5" />
+              <span>Editor</span>
+            </button>
           </div>
         </div>
       )}
