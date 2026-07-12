@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import logoImage from "@/assets/new-logo.png";
 import { SubscribeDialog } from "./SubscribeDialog";
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useEditor } from "@/contexts/EditorContext";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -49,8 +50,18 @@ export const Navbar = () => {
   }, []);
 
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { isEditorMode, setShowLoginDialog } = useEditor();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  const handleEditorClick = () => {
+    if (isEditorMode) {
+      navigate('/newsletter/new');
+    } else {
+      setShowLoginDialog(true);
+    }
+  };
   const [question, setQuestion] = useState("");
 
   const toggleDarkMode = () => {
@@ -157,6 +168,13 @@ export const Navbar = () => {
           >
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
+          <button
+            onClick={handleEditorClick}
+            className="p-2 rounded-lg hover:bg-muted transition-colors"
+            aria-label="Editor"
+          >
+            <Pencil className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -226,6 +244,16 @@ export const Navbar = () => {
             >
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
+            </button>
+            <button
+              onClick={() => {
+                handleEditorClick();
+                setMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-2 p-3 rounded-lg hover:bg-muted transition-colors"
+            >
+              <Pencil className="w-5 h-5" />
+              <span>Editor</span>
             </button>
           </div>
         </div>
