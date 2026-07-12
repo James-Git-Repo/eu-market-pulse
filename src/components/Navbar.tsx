@@ -168,6 +168,13 @@ export const Navbar = () => {
           >
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
+          <button
+            onClick={handleEditorClick}
+            className="p-2 rounded-lg hover:bg-muted transition-colors"
+            aria-label="Editor"
+          >
+            <Pencil className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
