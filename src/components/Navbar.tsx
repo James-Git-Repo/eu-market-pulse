@@ -50,8 +50,18 @@ export const Navbar = () => {
   }, []);
 
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { isEditorMode, setShowLoginDialog } = useEditor();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  const handleEditorClick = () => {
+    if (isEditorMode) {
+      navigate('/newsletter/new');
+    } else {
+      setShowLoginDialog(true);
+    }
+  };
   const [question, setQuestion] = useState("");
 
   const toggleDarkMode = () => {
