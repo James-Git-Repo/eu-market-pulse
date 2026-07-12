@@ -2,7 +2,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Menu, X, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useEditor } from "@/contexts/EditorContext";
 import logoImage from "@/assets/new-logo.png";
 import { SubscribeDialog } from "./SubscribeDialog";
 import { ContributeDialog } from "./ContributeDialog";
