@@ -105,4 +105,74 @@ All colors MUST be HSL.
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
   }
+
+  .eyebrow {
+    @apply inline-block text-[0.68rem] font-body font-semibold uppercase tracking-[0.18em] text-primary;
+  }
+
+  .rule-hairline {
+    @apply border-t border-border/70;
+  }
+
+  .reading-column {
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+}
+
+/* Editorial longform typography for article bodies */
+.article-prose {
+  font-size: 1.1rem;
+  line-height: 1.78;
+  hyphens: auto;
+}
+
+@media (min-width: 640px) {
+  .article-prose {
+    font-size: 1.1875rem;
+  }
+}
+
+.article-prose > p {
+  margin-block: 1.15rem !important;
+}
+
+.article-prose > p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.4em;
+  line-height: 0.82;
+  font-weight: 700;
+  padding-right: 0.08em;
+  margin-top: 0.06em;
+  color: hsl(var(--primary));
+}
+
+.article-prose h2 {
+  font-size: 1.65rem;
+  letter-spacing: -0.01em;
+  margin-top: 2.4rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.article-prose h3 {
+  font-size: 1.3rem;
+  margin-top: 1.9rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.article-prose a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.article-prose blockquote {
+  border-left: 2px solid hsl(var(--primary));
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  margin-block: 2rem;
+  font-size: 1.25em;
+  font-style: italic;
+  line-height: 1.5;
+  color: hsl(var(--foreground) / 0.85);
 }

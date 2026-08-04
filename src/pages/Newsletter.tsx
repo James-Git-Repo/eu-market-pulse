@@ -52,25 +52,60 @@ const Newsletter = () => {
     });
   }, [searchQuery, selectedTag, posts]);
 
-  return (
-    <main className="container mx-auto px-4 py-8 sm:py-10 md:py-12">
-      <SEO title={"Newsletter — The (un)Stable Net"} description={"Weekly European Market Movers newsletter: macro signals, sector rotations and clear, actionable analysis."} path={"/newsletter"} />
-      <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Newsletter</h1>
-        <p className="text-xl text-muted-foreground">European Market Movers — weekly macro & market signals</p>
-      </div>
+  const featured = selectedTag === "all" && !searchQuery ? filteredPosts[0] : undefined;
+  const gridPosts = featured ? filteredPosts.slice(1) : filteredPosts;
 
-      <div className="flex justify-between items-center mb-6">
+  const renderCard = (post: any, variant: "default" | "featured") => (
+    <PostCard
+      key={post.id}
+      id={post.id}
+      slug={post.slug}
+      title={post.title}
+      subtitle={post.subtitle}
+      content={post.content}
+      author={post.author}
+      dek={post.subtitle || ''}
+      tag={post.tag}
+      variant={variant}
+      coverUrl={post.image_url || ''}
+      date={new Date(post.published_at).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })}
+      readTime={post.read_time}
+      onDelete={fetchPosts}
+      onEdit={(article) => navigate(`/newsletter/${article.id}/edit`, { state: { article } })}
+    />
+  );
+
+  return (
+    <main className="container mx-auto px-4 py-10 sm:py-14 md:py-16">
+      <SEO title={"Newsletter — The (un)Stable Net"} description={"Weekly European Market Movers newsletter: macro signals, sector rotations and clear, actionable analysis."} path={"/newsletter"} />
+
+      <header className="max-w-3xl mb-10 sm:mb-12">
+        <span className="eyebrow mb-4">European Market Movers</span>
+        <h1 className="text-5xl md:text-7xl font-bold leading-[1.02] tracking-tight mt-3 mb-5">
+          Newsletter
+        </h1>
+        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+          Weekly macro and market signals from Europe — sector rotations, policy shifts and
+          the numbers that actually move portfolios.
+        </p>
+      </header>
+
+      <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-8 border-t border-border/70 pt-5 mb-10 sm:mb-12">
         <FilterBar
+          variant="editorial"
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           selectedTag={selectedTag}
           onTagChange={setSelectedTag}
           tags={tags}
         />
-        
+
         {session && (
-          <Button onClick={() => navigate('/newsletter/new')}>
+          <Button onClick={() => navigate('/newsletter/new')} className="shrink-0 rounded-none">
             <Plus className="w-4 h-4 mr-2" />
             New Article
           </Button>
@@ -78,40 +113,31 @@ const Newsletter = () => {
       </div>
 
       {loading ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground text-lg">Loading articles...</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="aspect-[4/3] bg-muted rounded-md mb-5" />
+              <div className="h-2.5 w-20 bg-muted mb-4" />
+              <div className="h-4 bg-muted mb-2.5" />
+              <div className="h-4 w-2/3 bg-muted mb-5" />
+              <div className="h-3 w-1/2 bg-muted" />
+            </div>
+          ))}
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-12 sm:mb-14 md:mb-16">
-            {filteredPosts.map((post) => (
-              <PostCard
-                key={post.id}
-                id={post.id}
-                slug={post.slug}
-                title={post.title}
-                subtitle={post.subtitle}
-                content={post.content}
-                author={post.author}
-                dek={post.subtitle || ''}
-                tag={post.tag}
-                coverUrl={post.image_url || ''}
-                date={new Date(post.published_at).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-                readTime={post.read_time}
-                onDelete={fetchPosts}
-                onEdit={(article) => navigate(`/newsletter/${article.id}/edit`, { state: { article } })}
-              />
-            ))}
+          {featured && (
+            <div className="mb-12 sm:mb-16">{renderCard(featured, "featured")}</div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 sm:gap-y-14 mb-16">
+            {gridPosts.map((post) => renderCard(post, "default"))}
           </div>
 
           {filteredPosts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">
-                No articles found matching your criteria.
+            <div className="border-t border-border/70 pt-16 pb-12 text-center">
+              <p className="text-muted-foreground text-lg font-body italic">
+                No stories match your search yet.
               </p>
             </div>
           )}
