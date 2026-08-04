@@ -2,22 +2,22 @@
 
 > Weekly briefs on European equities, macro signals, technology and AI by Jacopo Berton — clear, actionable analysis with no noise.
 
-The (un)Stable Net publishes a weekly European market newsletter, long-form articles on markets, tech and AI, plus side projects (the AI Billboard / Million Slots, and GenieLink, a free link-in-bio platform).
+The main product of The (un)Stable Net is the weekly newsletter "European Market Movers" at /newsletter — macro signals, sector rotations and the numbers that move European portfolios. Alongside it there are long-form articles on markets, tech and AI, plus smaller side projects.
 
 ## Pages
 
+- [Newsletter — European Market Movers](/newsletter): The site's main product. Every weekly issue on European equities, macro signals, sector rotations and AI-driven market shifts.
+- [Subscribe](/subscribe): Sign up for the weekly European Market Movers newsletter.
+- [Archive](/archive): Full archive of newsletter issues and articles, filterable by year and tag.
+- [Articles](/articles): Latest published articles across markets, tech and AI.
 - [Home](/): Overview of the project and active initiatives.
 - [About](/about): Who Jacopo is and what the project is about.
-- [Articles](/articles): Latest published articles across markets, tech and AI.
-- [Archive](/archive): Full archive of published articles, filterable by year and tag.
-- [Newsletter](/newsletter): Weekly European Market Movers newsletter.
-- [Subscribe](/subscribe): Sign up for the weekly newsletter.
 - [Contribute](/contribute): Submit a guest article or pitch.
-- [Resources](/resources): Curated reading list, tools and references.
-- [AI Billboard Project](/million-slots): The Million Slots / AI Billboard side project.
-- [GenieLink](/genielink): Free link-in-bio platform.
 
 ## Optional
 
+- [Resources](/resources): Curated reading list, tools and references.
+- [AI Billboard Project](/million-slots): The Million Slots / AI Billboard side project.
+- [GenieLink](/genielink): Free link-in-bio platform.
 - [Terms](/legal/terms): Terms of use.
 - [Privacy](/legal/privacy): Privacy policy.
