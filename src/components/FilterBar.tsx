@@ -39,11 +39,12 @@ export const FilterBar = ({
                   type="button"
                   onClick={() => onTagChange(tag)}
                   aria-pressed={active}
+                  title={tag === "all" ? "All stories" : tag}
                   className={`px-3.5 py-1.5 text-xs font-body uppercase tracking-[0.12em] border transition-colors whitespace-nowrap ${
                     active
                       ? "bg-primary text-primary-foreground border-primary"
                       : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/40"
-                  }`}
+                  } max-w-[16rem] overflow-hidden text-ellipsis`}
                 >
                   {tag === "all" ? "All stories" : tag}
                 </button>
