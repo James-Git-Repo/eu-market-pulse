@@ -219,7 +219,7 @@ const Post = () => {
           className="article-prose prose dark:prose-invert max-w-none mb-12 sm:mb-16 
                      [&_p:empty]:min-h-[1rem]
                      [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold
-                     [&_ul]:!list-disc [&_ul]:!pl-10 [&_ol]:!list-decimal [&_ol]:!pl-10
+                     [&_ul]:!list-disc [&_ul]:!pl-[1.1rem] [&_ol]:!list-decimal [&_ol]:!pl-[1.25rem]
                      [&_li]:!list-item [&_li]:!ml-0
                      [&_img]:rounded-md"
         />
