@@ -247,6 +247,14 @@ const Index = () => {
         <p className="text-xl md:text-2xl font-body text-foreground max-w-3xl">
           A blog about financial markets, tech & AI and content creation
         </p>
+        <p className="mt-8">
+          <Link
+            to="/newsletter"
+            className="inline-block font-body font-bold text-lg md:text-xl text-primary hover:underline decoration-1 underline-offset-[6px]"
+          >
+            Read the weekly European Market Movers newsletter →
+          </Link>
+        </p>
       </section>
 
       {/* Projects Section */}
@@ -271,9 +279,9 @@ const Index = () => {
                   <Pencil className="w-4 h-4" />
                 </Button>
               )}
-              <h3 className="text-2xl font-bold font-body mb-3">Newsletter project</h3>
+              <h3 className="text-2xl font-bold font-body mb-3">Newsletter — European Market Movers</h3>
               <p className="text-muted-foreground font-body mb-6">
-                European Market Movers: weekly macro & market signals
+                The weekly newsletter on European equities: macro signals, sector rotations and market moves.
               </p>
               {projectCovers.newsletter.imageUrl ? (
                 <div className="aspect-video rounded-lg overflow-hidden">
