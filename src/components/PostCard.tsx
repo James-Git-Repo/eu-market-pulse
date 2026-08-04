@@ -126,8 +126,8 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
           </div>
 
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="eyebrow">{tag}</span>
+            <div className="flex items-center gap-3 mb-4 min-w-0">
+              <span className="eyebrow line-clamp-1">{tag}</span>
               <span className="text-xs text-muted-foreground uppercase tracking-[0.14em]">Latest</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-body font-bold leading-[1.12] mb-4 group-hover:underline decoration-1 underline-offset-[6px]">
@@ -157,7 +157,7 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
             )}
           </div>
 
-          <span className="eyebrow mb-2.5">{tag}</span>
+          <span className="eyebrow mb-2.5 line-clamp-1">{tag}</span>
 
           <h3 className="text-xl font-body font-bold leading-snug mb-2.5 line-clamp-2 group-hover:underline decoration-1 underline-offset-[5px]">
             {title}
