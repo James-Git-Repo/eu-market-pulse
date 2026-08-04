@@ -126,7 +126,10 @@ export const Navbar = () => {
         <div className="hidden md:flex items-center gap-6">
           {isHomePage ? (
             <>
-              <Link to="/articles" className="text-foreground hover:text-primary transition-colors font-body">
+              <Link
+                to="/newsletter"
+                className="text-foreground hover:text-primary transition-colors font-body font-bold"
+              >
                 Newsletter
               </Link>
               <Link
@@ -193,7 +196,11 @@ export const Navbar = () => {
           <div className="container mx-auto px-4 py-4 flex flex-col gap-3">
             {isHomePage ? (
               <>
-                <Link to="/articles" onClick={() => setMobileMenuOpen(false)} className="p-3 rounded-lg hover:bg-muted transition-colors font-body">
+                <Link
+                  to="/newsletter"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-3 rounded-lg hover:bg-muted transition-colors font-body font-bold"
+                >
                   Newsletter
                 </Link>
                 <Link

@@ -241,6 +241,15 @@ const Post = () => {
 
         <CommentSection articleId={post.id} />
 
+        <div className="mt-14 sm:mt-16 border-t border-border/70 pt-8">
+          <Link
+            to="/newsletter"
+            className="font-body text-base sm:text-lg font-bold text-primary hover:underline decoration-1 underline-offset-[5px]"
+          >
+            More issues of the weekly European Market Movers newsletter
+          </Link>
+        </div>
+
         {relatedPosts.length > 0 && (
           <div className="mt-14 sm:mt-16 border-t border-border/70 pt-8">
             <h2 className="eyebrow mb-6">Continue Reading</h2>

@@ -52,6 +52,52 @@ const Newsletter = () => {
   const featured = selectedTag === "all" && !searchQuery ? filteredPosts[0] : undefined;
   const gridPosts = featured ? filteredPosts.slice(1) : filteredPosts;
 
+  const SITE = "https://the-un-stable.net";
+  const jsonLd = useMemo(() => {
+    const schemas: Record<string, unknown>[] = [
+      {
+        "@context": "https://schema.org",
+        "@type": ["CollectionPage", "Blog"],
+        name: "European Market Movers — Weekly Newsletter",
+        headline: "European Market Movers — Weekly Newsletter",
+        description:
+          "The weekly European Market Movers newsletter: macro signals, sector rotations, policy shifts and the numbers that actually move European portfolios.",
+        url: `${SITE}/newsletter`,
+        inLanguage: "en",
+        isPartOf: { "@type": "WebSite", name: "The (un)Stable Net", url: `${SITE}/` },
+        publisher: {
+          "@type": "Organization",
+          name: "The (un)Stable Net",
+          url: `${SITE}/`,
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Newsletter", item: `${SITE}/newsletter` },
+        ],
+      },
+    ];
+
+    if (posts.length > 0) {
+      schemas.push({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Latest newsletter issues",
+        itemListElement: posts.slice(0, 10).map((post, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: post.title,
+          url: `${SITE}/post/${post.slug}`,
+        })),
+      });
+    }
+
+    return schemas;
+  }, [posts]);
+
   const renderCard = (post: any, variant: "default" | "featured") => (
     <PostCard
       key={post.id}
@@ -79,19 +125,21 @@ const Newsletter = () => {
   return (
     <main className="container mx-auto px-4 py-10 sm:py-14 md:py-16">
       <SEO
-        title={"Newsletter: The (un)Stable Net"}
+        title={"European Market Movers — Weekly Newsletter | The (un)Stable Net"}
         description={
-          "Weekly European Market Movers newsletter: macro signals, sector rotations and clear, actionable analysis."
+          "Every week: European equities, macro signals, sector rotations and AI-driven market shifts, explained in a short, actionable brief. Read the latest issue of European Market Movers."
         }
         path={"/newsletter"}
+        image={featured?.image_url || undefined}
+        jsonLd={jsonLd}
       />
 
       <header className="max-w-3xl mb-10 sm:mb-12">
         <span className="eyebrow mb-4">European Market Movers</span>
         <h1 className="text-5xl md:text-7xl font-bold leading-[1.02] tracking-tight mt-3 mb-5">Newsletter</h1>
         <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-          Weekly macro and market signals from Europe: sector rotations, policy shifts and the numbers that actually
-          move portfolios.
+          European Market Movers is the weekly newsletter of The (un)Stable Net: macro and market signals from Europe,
+          sector rotations, policy shifts and the numbers that actually move portfolios.
         </p>
       </header>
 
