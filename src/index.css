@@ -137,16 +137,6 @@ All colors MUST be HSL.
   margin-block: 1.15rem !important;
 }
 
-.article-prose > p:first-of-type::first-letter {
-  float: left;
-  font-size: 3.4em;
-  line-height: 0.82;
-  font-weight: 700;
-  padding-right: 0.08em;
-  margin-top: 0.06em;
-  color: hsl(var(--primary));
-}
-
 .article-prose h2 {
   font-size: 1.65rem;
   letter-spacing: -0.01em;

@@ -63,7 +63,7 @@ article ul,
   display: block !important;
   list-style-type: disc !important;
   list-style-position: outside !important;
-  padding-left: 2.5rem !important;
+  padding-left: 1.1rem !important;
   margin: 1rem 0 !important;
   margin-left: 0 !important;
 }
@@ -79,7 +79,7 @@ article ol,
   display: block !important;
   list-style-type: decimal !important;
   list-style-position: outside !important;
-  padding-left: 2.5rem !important;
+  padding-left: 1.25rem !important;
   margin: 1rem 0 !important;
   margin-left: 0 !important;
 }
@@ -95,8 +95,9 @@ article li,
   display: list-item !important;
   list-style-position: outside !important;
   margin-left: 0 !important;
-  padding-left: 0.5rem !important;
-  margin-bottom: 0.25rem;
+  padding-left: 0.25rem !important;
+  margin-bottom: 0.35rem;
+  text-align: left;
 }
 
 .ProseMirror ul > li,
