@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Trash2, Pencil } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,11 +18,12 @@ interface PostCardProps {
   date: string;
   readTime: string;
   coverUrl: string;
+  variant?: "default" | "featured";
   onDelete?: () => void;
   onEdit?: (article: any) => void;
 }
 
-export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag, date, readTime, coverUrl, onDelete, onEdit }: PostCardProps) => {
+export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag, date, readTime, coverUrl, variant = "default", onDelete, onEdit }: PostCardProps) => {
   const { isEditorMode } = useEditor();
   const { toast } = useToast();
 
@@ -67,7 +67,7 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
   };
 
   return (
-    <div className="relative group">
+    <div className="relative group h-full">
       {isEditorMode && (
         <div className="absolute top-2 right-2 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button
@@ -110,45 +110,72 @@ export const PostCard = ({ id, slug, title, subtitle, content, author, dek, tag,
         </div>
       )}
       
-      <Link to={`/post/${slug}`} className="block">
-        <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 transform">
-          <div className="aspect-video overflow-hidden">
-            <img 
-              src={coverUrl} 
-              alt={title}
-              className="w-full h-full object-cover"
-            />
+      {variant === "featured" ? (
+        <Link
+          to={`/post/${slug}`}
+          className="grid md:grid-cols-2 gap-6 md:gap-10 items-center border-y border-border/70 py-8 md:py-10"
+        >
+          <div className="aspect-[16/10] overflow-hidden rounded-md bg-muted">
+            {coverUrl && (
+              <img
+                src={coverUrl}
+                alt={title}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+              />
+            )}
           </div>
-          <CardContent className="p-5">
-            <div className="mb-3">
-              <span className="inline-block px-2.5 py-0.5 text-xs font-body font-medium uppercase tracking-wide bg-primary/5 text-primary border border-primary/20 rounded-none">
-                {tag}
-              </span>
+
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="eyebrow">{tag}</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-[0.14em]">Latest</span>
             </div>
-            
-            <h3 className="text-lg font-body font-bold mb-2 line-clamp-2">
+            <h2 className="text-3xl md:text-4xl font-body font-bold leading-[1.12] mb-4 group-hover:underline decoration-1 underline-offset-[6px]">
               {title}
-            </h3>
-            
-            <p className="text-sm font-body text-muted-foreground mb-4 line-clamp-2">
+            </h2>
+            <p className="text-base md:text-lg font-body text-muted-foreground leading-relaxed mb-6 line-clamp-3">
               {dek}
             </p>
-            
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <span>{date}</span>
-                <span>•</span>
-                <span>{readTime}</span>
-              </div>
-              
-              <div className="flex items-center gap-1 text-primary font-medium uppercase tracking-wide text-xs">
-                Read
-                <ArrowRight className="w-3 h-3" />
-              </div>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              {author && <span>{author}</span>}
+              {author && <span className="text-border">/</span>}
+              <span>{date}</span>
+              <span className="text-border">/</span>
+              <span>{readTime}</span>
             </div>
-          </CardContent>
-        </Card>
-      </Link>
+          </div>
+        </Link>
+      ) : (
+        <Link to={`/post/${slug}`} className="flex h-full flex-col">
+          <div className="aspect-[4/3] overflow-hidden rounded-md bg-muted mb-5">
+            {coverUrl && (
+              <img
+                src={coverUrl}
+                alt={title}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+              />
+            )}
+          </div>
+
+          <span className="eyebrow mb-2.5">{tag}</span>
+
+          <h3 className="text-xl font-body font-bold leading-snug mb-2.5 line-clamp-2 group-hover:underline decoration-1 underline-offset-[5px]">
+            {title}
+          </h3>
+
+          <p className="text-sm font-body text-muted-foreground leading-relaxed mb-5 line-clamp-2">
+            {dek}
+          </p>
+
+          <div className="mt-auto flex items-center justify-between pt-3 border-t border-border/70 text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
+            <span className="truncate">{date} / {readTime}</span>
+            <span className="flex items-center gap-1 text-primary shrink-0">
+              Read
+              <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </div>
+        </Link>
+      )}
     </div>
   );
 };
