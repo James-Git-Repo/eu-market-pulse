@@ -95,7 +95,7 @@ const Newsletter = () => {
         </p>
       </header>
 
-      <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-8 border-t border-border/70 pt-5 mb-10 sm:mb-12">
+      <div className="border-t border-border/70 pt-6 mb-10 sm:mb-12">
         <FilterBar
           variant="editorial"
           searchQuery={searchQuery}
@@ -106,10 +106,12 @@ const Newsletter = () => {
         />
 
         {session && (
-          <Button onClick={() => navigate("/newsletter/new")} className="shrink-0 rounded-none">
-            <Plus className="w-4 h-4 mr-2" />
-            New Article
-          </Button>
+          <div className="mt-6 flex justify-end">
+            <Button onClick={() => navigate("/newsletter/new")} className="shrink-0 rounded-none">
+              <Plus className="w-4 h-4 mr-2" />
+              New Article
+            </Button>
+          </div>
         )}
       </div>
 
